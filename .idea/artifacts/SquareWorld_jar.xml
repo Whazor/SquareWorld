@@ -1,0 +1,9 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SquareWorld:jar">
+    <output-path>$PROJECT_DIR$/server/plugins</output-path>
+    <root id="archive" name="SquareWorld.jar">
+      <element id="module-output" name="SquareWorld" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/server/craftbukkit.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>
