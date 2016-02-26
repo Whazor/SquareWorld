@@ -2,3 +2,4 @@ name: SquareWorld
 version: 1.0.0
 author: Wouter and Nanne
 main: ne.nan.squareworld.Main
+load: startup

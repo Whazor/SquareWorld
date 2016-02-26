@@ -25,15 +25,24 @@ public class Main extends JavaPlugin {
         private Boolean generateBedrockBlock;
 
         public YourGenerator() {
-            this.generateBedrockBlock = true;
+            this.generateBedrockBlock = false;
         }
 
         @Override
         public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
             ChunkData data = createChunkData(world);
-            if (generateBedrockBlock && x == 0 && z == 0) {
-                data.setBlock(0, 63, 0, Material.BEDROCK);
+
+
+            for (int k = 0; k < 100; k++) {
+                for (int i = 0; i < 16; i++) {
+                    for (int j = 0; j < 16; j++) {
+                        data.setBlock(i, -k, j, Material.BEDROCK);
+                    }
+                }
             }
+
+
+
             return data;
         }
 
@@ -44,11 +53,7 @@ public class Main extends JavaPlugin {
 
         @Override
         public Location getFixedSpawnLocation(World world, Random random) {
-            if (generateBedrockBlock) {
-                return new Location(world, 0.5, 64, 0.5);
-            } else {
-                return new Location(world, 0, 64, 0);
-            }
+            return new Location(world, 10, 10, 10);
         }
     }
 }
