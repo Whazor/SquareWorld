@@ -13,7 +13,7 @@ public class Settlement {
     int y;
     int width;
     int height;
-    Polygon pol;
+
     private Envelope envelope;
 
     public Settlement(int x, int y, int width, int height) {

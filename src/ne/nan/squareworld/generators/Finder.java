@@ -30,8 +30,8 @@ public class Finder {
         Envelope envelope = new Envelope(new Coordinate(x - rx, y - ry));
         List list = block.query(envelope);
 
-//        Stream<Settlement> stream = list.stream().filter(p -> ((Settlement)p).getEnvelope().intersects(envelope));
-        if(list.size() > 0) {
+        Stream<Settlement> stream = fl.filter(list, envelope);
+        if(stream.count() > 0) {
             return Material.GRASS;
         } else {
             return Material.BEDROCK;

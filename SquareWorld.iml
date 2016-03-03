@@ -18,7 +18,8 @@
         </SOURCES>
       </library>
     </orderEntry>
-    <orderEntry type="library" name="com.vividsolutions:jts-core:1.14.0" level="project" />
+    <orderEntry type="library" exported="" name="com.vividsolutions:jts-core:1.14.0" level="project" />
+    <orderEntry type="library" name="org.jogamp.jogl:jogl-all-main:2.3.2" level="project" />
+    <orderEntry type="library" name="org.jogamp.gluegen:gluegen-rt-main:2.3.2" level="project" />
   </component>
 </module>
-

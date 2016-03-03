@@ -1,5 +1,7 @@
 package ne.nan.squareworld;
 
+import ne.nan.squareworld.generators.Finder;
+import ne.nan.squareworld.generators.levels.Region;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -23,6 +25,8 @@ public class Main extends JavaPlugin {
 
     private class YourGenerator extends ChunkGenerator {
         private Boolean generateBedrockBlock;
+        private Region region = new Region(1337);
+        private Finder finder = new Finder(region);
 
         public YourGenerator() {
             this.generateBedrockBlock = false;
@@ -36,11 +40,16 @@ public class Main extends JavaPlugin {
             for (int k = 0; k < 100; k++) {
                 for (int i = 0; i < 16; i++) {
                     for (int j = 0; j < 16; j++) {
-                        data.setBlock(i, -k, j, Material.BEDROCK);
+
+                        data.setBlock(i, -1-k, j, Material.BEDROCK);
                     }
                 }
             }
-
+            for (int i = 0; i < 16; i++) {
+                for (int j = 0; j < 16; j++) {
+                    data.setBlock(i, 0, j, finder.getBlock(x+i, z+j));
+                }
+            }
 
 
             return data;
