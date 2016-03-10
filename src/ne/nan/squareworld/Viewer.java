@@ -6,13 +6,13 @@ import com.jogamp.opengl.awt.GLCanvas;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.util.function.Function;
 
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 import ne.nan.squareworld.generators.Finder;
 import ne.nan.squareworld.generators.levels.Region;
+import org.bukkit.Material;
 
 import javax.swing.*;
 
@@ -55,7 +55,8 @@ public class Viewer {
         jframe.getContentPane().add( glcanvas, BorderLayout.CENTER );
         jframe.setSize( 1200, 800 );
         jframe.setVisible( true );
-        jframe.getContentPane().addMouseListener(new MouseAdapter() {
+
+        glcanvas.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseWheelMoved(MouseWheelEvent e) {
                 super.mouseWheelMoved(e);
@@ -75,12 +76,19 @@ public class Viewer {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
+                int nx = e.getX();
+                int ny = e.getY();
+                System.out.println((nx - x) + " - " + (ny - y));
+                OneTriangle.move(nx - x, ny - y);
+                glcanvas.repaint();
             }
 
             @Override
             public void mouseMoved(MouseEvent e) {
 //                super.mouseMoved(e);
-                OneTriangle.move(x, y);
+//                int nx = e.getX();
+//                int ny = e.getY();
+//                OneTriangle.move(nx - x, ny - y);
             }
         });
     }
@@ -106,7 +114,6 @@ public class Viewer {
         }
 
         public static void rect(GL2 gl2, int x, int y, int width, int height/*, int w, int h*/) {
-
             gl2.glColor3f( 1, 0, 0 );
             gl2.glBegin(GL2.GL_POLYGON);
             gl2.glVertex2d(x, y);
@@ -115,10 +122,6 @@ public class Viewer {
             gl2.glVertex2d(x, y + height);
 
             gl2.glEnd();
-//            gl2.glVertex2i( x, y );
-//            gl2.glVertex2i( x + width, y );
-//            gl2.glVertex2i( x, height + y );
-//            gl2.glVertex2i( x + width, height + y );
         }
 
         static Region fl = new Region(1337);
@@ -128,26 +131,30 @@ public class Viewer {
         protected static void render( GL2 gl2, int width, int height ) {
             System.out.println("...");
             gl2.glClear( GL.GL_COLOR_BUFFER_BIT );
-
-            // draw a triangle filling the window
-
             gl2.glLoadIdentity();
 
             int scale = 5;
-            for (int x = 0; x < width; x++) {
-                for (int y = 0; y < height; y++) {
-                    switch (finder.getBlock(OneTriangle.x+x, OneTriangle.y+y)) {
-                        case GRASS:
-                            rect(gl2, x, y, 1, 1);
-                            break;
+            for (int x = 0; x < width; x+=16) {
+                for (int y = 0; y < height; y+=16) {
+                    Material[][] chunk = finder.getChunk(OneTriangle.x + x, OneTriangle.y + y);
+
+                    for (int i = 0; i < chunk.length; i++) {
+                        for (int j = 0; j < chunk[i].length; j++) {
+                            switch (chunk[i][j]) {
+                                case GRASS:
+                                    rect(gl2, x + i, y + j, 1, 1);
+                                    break;
+                                default: // nothing
+                            }
+                        }
                     }
                 }
             }
         }
 
         public static void move(int x, int y) {
-            OneTriangle.x = x;
-            OneTriangle.y = y;
+            OneTriangle.x =- x;
+            OneTriangle.y =- y;
         }
     }
 }
@@ -175,7 +182,7 @@ public class Viewer {
 //
 //        for (int x = 0; x < 1000; x++) {
 //            for (int y = 0; y < 1000; y++) {
-//                switch (finder.getBlock(x, y)) {
+//                switch (finder.getChunk(x, y)) {
 //                    case GRASS:
 //                        graphics.drawRect(x*2, y*2, 2, 2);
 //                        break;

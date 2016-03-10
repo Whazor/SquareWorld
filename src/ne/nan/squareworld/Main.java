@@ -45,9 +45,11 @@ public class Main extends JavaPlugin {
                     }
                 }
             }
-            for (int i = 0; i < 16; i++) {
-                for (int j = 0; j < 16; j++) {
-                    data.setBlock(i, 0, j, finder.getBlock(x+i, z+j));
+
+            Material[][] chunk = finder.getChunk(x, z);
+            for (int i = 0; i < chunk.length; i++) {
+                for (int j = 0; j < chunk[i].length; j++) {
+                    data.setBlock(i, 0, j, chunk[i][j]);
                 }
             }
 

@@ -21,20 +21,36 @@ public class Finder {
         this.fl = fl;
     }
 
-    public Material getBlock(int x, int y) {
-        int rx = fl.round(x);
-        int ry = fl.round(y);
+    int chunkSize = Region.chunkSize;
 
+    public Material[][] getChunk(int x, int y) {
         SpatialIndex block = fl.getRegion(fl.round(x), fl.round(y));
 
-        Envelope envelope = new Envelope(new Coordinate(x - rx, y - ry));
-        List list = block.query(envelope);
+        Envelope envelope = new Envelope(
+                new Coordinate(x, y),
+                new Coordinate(x + chunkSize, y + chunkSize));
+        List<Settlement> list = (List<Settlement>) block.query(envelope);
 
-        Stream<Settlement> stream = fl.filter(list, envelope);
-        if(stream.count() > 0) {
-            return Material.GRASS;
-        } else {
-            return Material.BEDROCK;
-        }
+//        Stream<Settlement> stream = fl.filter(list.stream(), envelope);
+
+        Material[][] result = new Material[chunkSize][chunkSize];
+        for (int i = 0; i < chunkSize; i++)
+            for (int j = 0; j < chunkSize; j++) {
+                Envelope env = new Envelope(new Coordinate(fl.mod(x) + i, fl.mod(y) + j));
+                Stream<Settlement> filter = fl.filter(list.stream(), env);
+                if(filter.count() > 0) {
+                    result[i][j] = Material.GRASS;
+                } else {
+                    result[i][j] = Material.BEDROCK;
+                }
+            }
+//        System.out.println("chunk");
+        return result;
+
+//        if(stream.count() > 0) {
+//            return Material.GRASS;
+//        } else {
+//            return Material.BEDROCK;
+//        }
     }
 }

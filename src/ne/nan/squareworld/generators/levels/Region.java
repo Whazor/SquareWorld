@@ -16,6 +16,7 @@ import java.util.stream.Stream;
  * Created by nanne on 24/02/16.
  */
 public class Region {
+    public static int chunkSize = 16;
     private long seed;
 
     public Region(long seed) {
@@ -24,12 +25,14 @@ public class Region {
     int minCitySize = 300;
     int maxCitySize = 500;
     int maxCities = 100;
-    int minCities = 30;
-    int regionSize = maxCitySize * 10;
+    int minCities = 40;
+    int regionSize = (maxCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
 
     LinkedHashMap<Coordinate, SpatialIndex> map = new LinkedHashMap<>();
 
     public int round(int i) { return (int) Math.floor(i / getRegionSize()); }
+    public double mod(int i) { return i % getRegionSize(); }
+
     public int getRegionSize() { return regionSize; }
 
 
@@ -71,9 +74,9 @@ public class Region {
 
                 Settlement settlement = new Settlement(city_x, city_y, width, height);
                 Envelope envelope = settlement.getEnvelope();
-                List list = si.query(envelope);
+                List<Settlement> list = (List<Settlement>) si.query(envelope);
 
-                Stream<Settlement> stream = filter(list, envelope);
+                Stream<Settlement> stream = filter(list.stream(), envelope);
                 if(stream.count() == 0) {
                     si.insert(settlement.getEnvelope(), settlement);
                 } else {
@@ -85,8 +88,8 @@ public class Region {
         return si;
     }
 
-    public Stream<Settlement> filter(List list, Envelope envelope) {
-        return list.stream().filter(p -> ((Settlement)p).getEnvelope().intersects(envelope));
+    public Stream<Settlement> filter(Stream<Settlement> list, Envelope envelope) {
+        return list.filter(p -> p.getEnvelope().intersects(envelope));
     }
 }
 

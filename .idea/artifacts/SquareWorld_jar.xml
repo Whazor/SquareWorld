@@ -4,6 +4,7 @@
     <root id="archive" name="SquareWorld.jar">
       <element id="module-output" name="SquareWorld" />
       <element id="extracted-dir" path="$PROJECT_DIR$/server/craftbukkit.jar" path-in-jar="/" />
+      <element id="library" level="project" name="com.vividsolutions:jts-core:1.14.0" />
     </root>
   </artifact>
 </component>
