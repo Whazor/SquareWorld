@@ -13,18 +13,17 @@ public class City {
 
 //    seed
 /*
-    idea: take 1 size for the city, generate couple of random nodes in the graph with x,y values, then generate the main roads based on those variabls
+    We take an x and y for starting points to create the city around
+    The city has by default a size of 5000 by 5000
+    It is first divided into main sections
 
-     we have a list @coordinates with all the random coordinates in the plane
-     */
+    damnit ik heb echt te weinig gedaan
+*/
     int x = 15;
     int y = 15;
 
     private final List<Point2D> coordinates = new ArrayList<Point2D>();
-    for 
-    public boolean isThereAWall(Point2D userPosition) {
-        return coordinates.contains(userPosition);
-    }
+
 
 
 
