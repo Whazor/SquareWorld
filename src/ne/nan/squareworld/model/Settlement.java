@@ -8,15 +8,17 @@ import com.vividsolutions.jts.geom.Polygon;
 /**
  * Created by nanne on 24/02/16.
  */
-public class Settlement {
-    int x;
-    int y;
-    int width;
-    int height;
+public abstract class Settlement {
+    public final int zaad;
+    public final int x;
+    public final int y;
+    public final int width;
+    public final int height;
 
     private Envelope envelope;
 
-    public Settlement(int x, int y, int width, int height) {
+    public Settlement(int zaad, int x, int y, int width, int height) {
+        this.zaad = zaad;
         this.x = x;
         this.y = y;
         this.width = width;
@@ -27,6 +29,7 @@ public class Settlement {
         this.envelope = new Envelope(coordinateMin, coordinateMax);
     }
 
+    public abstract short[][] generate();
 
     public Envelope getEnvelope() {
         return envelope;

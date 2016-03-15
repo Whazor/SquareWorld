@@ -72,7 +72,7 @@ public class Region {
                 int width = minCitySize + Math.round(random.nextFloat() * difference);
                 int height = width;//minCitySize + Math.round(random.nextFloat() * difference);
 
-                Settlement settlement = new Settlement(city_x, city_y, width, height);
+                Settlement settlement = new City(random.nextInt(), city_x, city_y, width, height);
                 Envelope envelope = settlement.getEnvelope();
                 List<Settlement> list = (List<Settlement>) si.query(envelope);
 

@@ -38,6 +38,7 @@ public class Finder {
             for (int j = 0; j < chunkSize; j++) {
                 Envelope env = new Envelope(new Coordinate(fl.mod(x) + i, fl.mod(y) + j));
                 Stream<Settlement> filter = fl.filter(list.stream(), env);
+
                 if(filter.count() > 0) {
                     result[i][j] = Material.GRASS;
                 } else {

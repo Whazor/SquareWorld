@@ -1,5 +1,7 @@
 package ne.nan.squareworld.generators.levels;
 
+import ne.nan.squareworld.model.Settlement;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +10,15 @@ import java.util.Random;
 /**
  * Created by s133781 on 26-2-16.
  */
-public class City {
+public class City extends Settlement {
+    public City(int zaad, int x, int y, int width, int height) {
+        super(zaad, x, y, width, height);
+    }
+
+    @Override
+    public short[][] generate() {
+        return generateCity(x, y, width, height, 50);
+    }
 //    constructor met settlement
 //    x,y
 
@@ -24,7 +34,7 @@ public class City {
         return (int) Math.sqrt((coord1[0]-coord2[0])*(coord1[0]-coord2[0]) + (coord1[1]-coord2[1])*(coord1[1]-coord2[1]));
     }
 
-    private int generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints) {
+    private short[][] generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints) {
 //        short[][] intersections = new short[randomPoints][2];
 //
 ////        Create randompoints to create the city around
@@ -35,7 +45,7 @@ public class City {
 //            intersections[i] = new short[]{x, y};
 //        }
 
-        int[][] city = new int[sizeX][sizeY];
+        short[][] city = new short[sizeX][sizeY];
 
         List<int[]> intersections = new ArrayList<>();
         for(int i = 0; i <= randomPoints; i++) {
@@ -60,7 +70,7 @@ public class City {
 
 //        Place the points in the city 2d int[] plain
 
-
+        return city;
     }
 
 
