@@ -69,7 +69,8 @@ public class City extends Settlement {
 
 
 //        Place the points in the city 2d int[] plain
-
+//IDEA: take the center node, and go past all the nodes in order of the length ofthe center, then draw a rectangle
+// without crossing another road  by the end you should get something nice? guess try, tryout tomorrow
         return city;
     }
 
