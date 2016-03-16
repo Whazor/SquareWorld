@@ -5,3 +5,4 @@ server/plugins/SquareWorld.jar
 
 .idea/workspace.xml
 .idea/uiDesigner.xml
+*.iml
