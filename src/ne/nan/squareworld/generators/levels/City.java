@@ -2,10 +2,7 @@ package ne.nan.squareworld.generators.levels;
 
 import ne.nan.squareworld.model.Settlement;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 /**
  * Created by s133781 on 26-2-16.
@@ -52,14 +49,15 @@ public class City extends Settlement {
             Random rand = new Random();
             int x = rand.nextInt(sizeX) + 1;
             int y = rand.nextInt(sizeY) + 1;
-            intersections.add(new int[]{x, y});
+            intersections.add(new int[]{x, y, i});
         }
 //http://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
+//        remove all the nodes that are too close to eachother
         for(Iterator<int[]> iterator = intersections.iterator(); iterator.hasNext();) {
             int[] coord = iterator.next();
 //            loop through all the coordtoo coordinations and check the distance, if the distance is too large remove the coordinate and break out of the loop
             for(int[] coordtoo : intersections) {
-                if(distance(coord,coordtoo) < 50) {
+                if(distance(coord,coordtoo) < 25) {
                     iterator.remove();
                     break;
                 }
@@ -67,10 +65,67 @@ public class City extends Settlement {
         }
 //        make sure the points are enough distance away from each other, remove them if they aren't
 
+        int[] centercoordinate = {(int) sizeX / 2, (int) sizeY / 2};
+        //store the length of point x to the center in the i variable
+        for(int[] coordtoo : intersections) {
+           coordtoo[2] =  distance(centercoordinate,coordtoo);
+        }
+
+        Collections.sort(intersections, (a, b) -> {
+            if(a[2] < b[2]) { return -1; }
+            else if(a[2] > b[2]) { return 1; }
+            else { return 0; }
+//                return (Integer) (a[2]).compareTo(b[2]);
+        });
 
 //        Place the points in the city 2d int[] plain
 //IDEA: take the center node, and go past all the nodes in order of the length ofthe center, then draw a rectangle
 // without crossing another road  by the end you should get something nice? guess try, tryout tomorrow
+
+
+//        Place the points of intersections in the short[], and while we iterate over the points place the roads
+        int centercoordinatex = centercoordinate[0];
+        int centercoordinatey = centercoordinate[1];
+
+        city[centercoordinatex][centercoordinatey] = 1;
+        for(int[] coordtoo : intersections) {
+//            city[coordtoo[0]][coordtoo[1]] = 1;
+            int c_x = coordtoo[0];
+            int c_y = coordtoo[1];
+
+//            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
+            while (city[c_x][c_y] != 1 && c_x != centercoordinatex && c_y != centercoordinatey) {
+                city[c_x][c_y] = 1;
+                if(c_x > centercoordinatex) {
+                    c_x--;
+                } else if(c_x < centercoordinatex) {
+                    c_x++;
+                } else if(c_y > centercoordinatey) {
+                    c_y--;
+                } else if(c_y < centercoordinatey) {
+                    c_y++;
+                }
+            }
+//            reset the cursor and do the same for the other axis
+            c_x = coordtoo[0];
+            c_y = coordtoo[1];
+            while (city[c_x][c_y] != 1 && c_x != centercoordinatex && c_y != centercoordinatey) {
+                city[c_x][c_y] = 1;
+                if(c_y > centercoordinatey) {
+                    c_y--;
+                } else if(c_y < centercoordinatey) {
+                    c_y++;
+                } else if(c_x > centercoordinatex) {
+                    c_x--;
+                } else if(c_x < centercoordinatex) {
+                    c_x++;
+                }
+            }            
+        }
+
+//        public void drawrect(int[] a,int[] b) {
+//
+//    }
         return city;
     }
 
