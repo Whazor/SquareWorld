@@ -25,13 +25,13 @@ public class Region {
     int minCitySize = 300;
     int maxCitySize = 500;
     int maxCities = 100;
-    int minCities = 40;
+    int minCities = 20;
     int regionSize = (maxCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
 
     LinkedHashMap<Coordinate, SpatialIndex> map = new LinkedHashMap<>();
 
     public int round(int i) { return (int) Math.floor(i / getRegionSize()); }
-    public double mod(int i) { return i % getRegionSize(); }
+    public int mod(int i) { return i % getRegionSize(); }
 
     public int getRegionSize() { return regionSize; }
 
@@ -64,12 +64,12 @@ public class Region {
             boolean isIntersected;
             do {
                 isIntersected = false;
-                int city_x = Math.round(random.nextFloat() * regionSize);
-                int city_y = Math.round(random.nextFloat() * regionSize);
+                int city_x = Math.round(Math.round(random.nextFloat() * regionSize) / 16) * 16;
+                int city_y = Math.round(Math.round(random.nextFloat() * regionSize) / 16) * 16;
 
                 int difference = maxCitySize - minCitySize;
 
-                int width = minCitySize + Math.round(random.nextFloat() * difference);
+                int width = Math.round((minCitySize + Math.round(random.nextFloat() * difference)) / 16) * 16;
                 int height = width;//minCitySize + Math.round(random.nextFloat() * difference);
 
                 Settlement settlement = new City(random.nextInt(), city_x, city_y, width, height);

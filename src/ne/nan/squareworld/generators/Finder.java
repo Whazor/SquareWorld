@@ -8,6 +8,7 @@ import ne.nan.squareworld.model.Settlement;
 import org.bukkit.Material;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -26,26 +27,45 @@ public class Finder {
     public Material[][] getChunk(int x, int y) {
         SpatialIndex block = fl.getRegion(fl.round(x), fl.round(y));
 
+        // adept per region
+        int x2 = fl.mod(x);
+        int y2 = fl.mod(y);
+
         Envelope envelope = new Envelope(
-                new Coordinate(x, y),
-                new Coordinate(x + chunkSize, y + chunkSize));
+                new Coordinate(x2, y2),
+                new Coordinate(x2 + chunkSize - 1, y2 + chunkSize - 1));
         List<Settlement> list = (List<Settlement>) block.query(envelope);
 
 //        Stream<Settlement> stream = fl.filter(list.stream(), envelope);
 
+        Stream<Settlement> filter = fl.filter(list.stream(), envelope);
+
+//
+//
         Material[][] result = new Material[chunkSize][chunkSize];
         for (int i = 0; i < chunkSize; i++)
             for (int j = 0; j < chunkSize; j++) {
-                Envelope env = new Envelope(new Coordinate(fl.mod(x) + i, fl.mod(y) + j));
-                Stream<Settlement> filter = fl.filter(list.stream(), env);
+                result[i][j] = Material.GRASS;
+            }
 
-                if(filter.count() > 0) {
-                    result[i][j] = Material.GRASS;
-                } else {
-                    result[i][j] = Material.BEDROCK;
+        Optional<Settlement> first = filter.findFirst();
+        if (first.isPresent()) {
+            Settlement settlement = first.get();
+            short[][] generate = settlement.generate();
+            int x3 = x2 - settlement.x;
+            int y3 = y2 - settlement.y;
+            for (int i = 0; i < chunkSize; i++) {
+                for (int j = 0; j < chunkSize; j++) {
+                    try {
+                        result[i][j] = Material.getMaterial((int) generate[x3 + i][y3 + j]);
+                    }catch(ArrayIndexOutOfBoundsException ignored) {
+                        // huil
+//                        System.out.println("Faal");
+                    }
                 }
             }
-//        System.out.println("chunk");
+        }
+////        System.out.println("chunk");
         return result;
 
 //        if(stream.count() > 0) {
