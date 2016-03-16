@@ -14,7 +14,7 @@ public class City extends Settlement {
 
     @Override
     public short[][] generate() {
-        return generateCity(x, y, width, height, 50);
+        return generateCity(x, y, width, height, 100);
     }
 //    constructor met settlement
 //    x,y
@@ -43,21 +43,21 @@ public class City extends Settlement {
 //        }
 
         short[][] city = new short[sizeX][sizeY];
-
+        Random rand = new Random(zaad);
         List<int[]> intersections = new ArrayList<>();
         for(int i = 0; i <= randomPoints; i++) {
-            Random rand = new Random();
-            int x = rand.nextInt(sizeX) + 1;
-            int y = rand.nextInt(sizeY) + 1;
+            int x = rand.nextInt(sizeX);
+            int y = rand.nextInt(sizeY);
             intersections.add(new int[]{x, y, i});
         }
+
 //http://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
 //        remove all the nodes that are too close to eachother
         for(Iterator<int[]> iterator = intersections.iterator(); iterator.hasNext();) {
             int[] coord = iterator.next();
 //            loop through all the coordtoo coordinations and check the distance, if the distance is too large remove the coordinate and break out of the loop
             for(int[] coordtoo : intersections) {
-                if(distance(coord,coordtoo) < 25) {
+                if(distance(coord,coordtoo) < 40 && distance(coord,coordtoo) != 0) {
                     iterator.remove();
                     break;
                 }
@@ -92,40 +92,83 @@ public class City extends Settlement {
 //            city[coordtoo[0]][coordtoo[1]] = 1;
             int c_x = coordtoo[0];
             int c_y = coordtoo[1];
+            List<int[]> rollbacklist = new ArrayList<>();
+            rollbacklist.add(new int[]{c_x, c_y});
+            int minlengthx = 0;
+            int minlengthy = 0;
 
+            city[c_x][c_y] = 1;
 //            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
-            while (city[c_x][c_y] != 1 && c_x != centercoordinatex && c_y != centercoordinatey) {
-                city[c_x][c_y] = 1;
+            while(c_x != centercoordinatex || c_y != centercoordinatey) {
+
                 if(c_x > centercoordinatex) {
                     c_x--;
+                    minlengthx++;
                 } else if(c_x < centercoordinatex) {
                     c_x++;
+                    minlengthx++;
                 } else if(c_y > centercoordinatey) {
                     c_y--;
                 } else if(c_y < centercoordinatey) {
                     c_y++;
                 }
+                if(city[c_x][c_y] == 1) {
+                    break;
+                }
+                rollbacklist.add(new int[]{c_x, c_y});
+                city[c_x][c_y] = 1;
             }
+
 //            reset the cursor and do the same for the other axis
             c_x = coordtoo[0];
             c_y = coordtoo[1];
-            while (city[c_x][c_y] != 1 && c_x != centercoordinatex && c_y != centercoordinatey) {
-                city[c_x][c_y] = 1;
+            while (c_x != centercoordinatex || c_y != centercoordinatey) {
+
                 if(c_y > centercoordinatey) {
                     c_y--;
+                    minlengthy++;
                 } else if(c_y < centercoordinatey) {
                     c_y++;
+                    minlengthy++;
                 } else if(c_x > centercoordinatex) {
                     c_x--;
+
                 } else if(c_x < centercoordinatex) {
                     c_x++;
+
+                }
+                if(city[c_x][c_y] == 1) {
+                    break;
+                }
+                rollbacklist.add(new int[]{c_x, c_y});
+                city[c_x][c_y] = 1;
+            }
+
+            if(minlengthx < 15 || minlengthy < 15) {
+                for(int[] co: rollbacklist) {
+                    city[co[0]][co[1]] = 0;
                 }
             }
         }
-
+        for(short[] element : city) {
+            for (int i = 0; i < element.length; i++) {
+                short value = element[i];
+                if (value == 1) {
+                    element[i] = 0;
+                }
+                if (value == 0) {
+                    element[i] = 2;
+                }
+            }
+        }
 //        public void drawrect(int[] a,int[] b) {
 //
 //    }
+//        for(short[] element : city) {
+//            for (int i = 0; i < element.length; i++) {
+//                element[i] = 1;
+//            }
+//        }
         return city;
     }
 
