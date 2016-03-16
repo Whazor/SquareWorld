@@ -114,7 +114,6 @@ public class Viewer {
         }
 
         public static void rect(GL2 gl2, int x, int y, int width, int height/*, int w, int h*/) {
-            gl2.glColor3f( 1, 0, 0 );
             gl2.glBegin(GL2.GL_POLYGON);
             gl2.glVertex2d(x, y);
             gl2.glVertex2d(x + width, y);
@@ -142,10 +141,19 @@ public class Viewer {
                         for (int j = 0; j < chunk[i].length; j++) {
                             switch (chunk[i][j]) {
                                 case GRASS:
-                                    rect(gl2, x + i, y + j, 1, 1);
+                                    gl2.glColor3ub((byte)(24) , (byte)(174) , (byte)(24));
+//                                    gl2.glColor3f( 0.0416f, 0.0057471264f, 0.041666668f);
+                                    break;
+                                case STONE:
+                                    gl2.glColor3ub((byte)(140) , (byte)(140) , (byte)(140));
+                                    break;
+                                case DIRT:
+                                    gl2.glColor3ub((byte)(125) , (byte)(75) , (byte)(0));
                                     break;
                                 default: // nothing
+                                    gl2.glColor3f( 0, 0, 0 );
                             }
+                            rect(gl2, x + i, y + j, 1, 1);
                         }
                     }
                 }
