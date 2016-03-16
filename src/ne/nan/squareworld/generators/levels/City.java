@@ -120,7 +120,7 @@ public class City extends Settlement {
                 } else if(c_x < centercoordinatex) {
                     c_x++;
                 }
-            }            
+            }
         }
 
 //        public void drawrect(int[] a,int[] b) {
