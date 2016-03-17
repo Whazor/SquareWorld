@@ -35,18 +35,17 @@ public class Main extends JavaPlugin {
         @Override
         public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
             ChunkData data = createChunkData(world);
+//            System.out.println("Chunk: "+x+", "+z);
 
+//            for (int k = 0; k < 100; k++) {
+//                for (int i = 0; i < 16; i++) {
+//                    for (int j = 0; j < 16; j++) {
+//                        data.setBlock(i, -1-k, j, Material.BEDROCK);
+//                    }
+//                }
+//            }
 
-            for (int k = 0; k < 100; k++) {
-                for (int i = 0; i < 16; i++) {
-                    for (int j = 0; j < 16; j++) {
-
-                        data.setBlock(i, -1-k, j, Material.BEDROCK);
-                    }
-                }
-            }
-
-            Material[][] chunk = finder.getChunk(x, z);
+            Material[][] chunk = finder.getChunk(x * 16, z * 16);
             for (int i = 0; i < chunk.length; i++) {
                 for (int j = 0; j < chunk[i].length; j++) {
                     data.setBlock(i, 0, j, chunk[i][j]);

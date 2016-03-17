@@ -25,7 +25,7 @@ public class Region {
     int minCitySize = 300;
     int maxCitySize = 500;
     int maxCities = 100;
-    int minCities = 20;
+    int minCities = 50;
     int regionSize = (maxCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
 
     LinkedHashMap<Coordinate, SpatialIndex> map = new LinkedHashMap<>();
@@ -71,6 +71,7 @@ public class Region {
 
                 int width = Math.round((minCitySize + Math.round(random.nextFloat() * difference)) / 16) * 16;
                 int height = width;//minCitySize + Math.round(random.nextFloat() * difference);
+                System.out.println(coordinate.x + "+" +city_x + ", " + coordinate.y + "+" +city_y + ", " + width + ", " + height);
 
                 Settlement settlement = new City(random.nextInt(), city_x, city_y, width, height);
                 Envelope envelope = settlement.getEnvelope();
