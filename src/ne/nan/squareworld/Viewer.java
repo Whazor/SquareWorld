@@ -44,7 +44,7 @@ public class Viewer {
             }
         });
 
-        final JFrame jframe = new JFrame( "One Triangle Swing GLCanvas" );
+        final JFrame jframe = new JFrame( "SquareWorld" );
         jframe.addWindowListener( new WindowAdapter() {
             public void windowClosing( WindowEvent windowevent ) {
                 jframe.dispose();
