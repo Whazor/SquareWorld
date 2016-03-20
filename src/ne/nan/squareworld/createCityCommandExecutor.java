@@ -3,6 +3,7 @@ package ne.nan.squareworld;
 import ne.nan.squareworld.generators.levels.City;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -36,7 +37,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                 Player player = (Player) sender;
 
 //                generate the city in destad
-                City stad = new City(1234,0,0,500,500);
+                City stad = new City(1234,0,0,Integer.parseInt(args[1]),Integer.parseInt(args[2]));
                 short[][] destad = stad.generate();
 
 //                get the players location and store them in x z integers
@@ -44,6 +45,20 @@ public class createCityCommandExecutor implements CommandExecutor{
                 Location loc = player.getLocation();
                 int lx = (int) loc.getX();
                 int lz = (int) loc.getZ();
+                int ly = (int) loc.getY();
+                World lw = loc.getWorld();
+
+
+
+                Block bc = loc.getBlock();
+                bc.setType(Material.getMaterial(1));
+                loc.setX(loc.getX() + 2);
+                bc = loc.getBlock();
+                bc.setType(Material.getMaterial(2));
+
+
+                System.out.println("set location stone");
+
 
                 // Sets the block to type id 1 (stone).
                 for (int x = 0; x < destad.length; x++) {
@@ -51,14 +66,15 @@ public class createCityCommandExecutor implements CommandExecutor{
                     for (int z = 0; z < xrow.length; z++) {
                         short value = xrow[z];
 
-                        Location newloc = loc;
-                        newloc.setX(loc.getX() + x);
-                        newloc.setZ(loc.getZ() + z);
+                        Location temploc = new Location(lw,lx + x,ly,lz + z);
+                        System.out.println("temploc = " + temploc);
+                        System.out.println("value = " + value);
+                        temploc.setX(loc.getX());
+                        temploc.setZ(loc.getZ());
 
-                        System.out.println("newloc = " +newloc);
+                        Block b = temploc.getBlock();
+                        b.setType(Material.getMaterial((int) value));
 
-                        Block b = newloc.getBlock();
-                        b.setType(Material.getMaterial(value));
                     }
                 }
 

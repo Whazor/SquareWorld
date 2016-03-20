@@ -1,13 +1,20 @@
 lastAccountName: otherwise777
 timestamps:
-  login: 1458480755793
-  lastteleport: 1458477959598
+  login: 1458484984020
+  lastteleport: 1458482062456
 ipAddress: 127.0.0.1
 lastlocation:
   world: world
-  x: -3.6999999880790715
-  y: 63.0
-  z: 14.69999998807907
-  yaw: -72.15002
-  pitch: 9.149991
+  x: 172.5
+  y: 73.0
+  z: 256.5
+  yaw: 0.0
+  pitch: 0.0
 afk: false
+logoutlocation:
+  world: world
+  x: 174.54736698622762
+  y: 76.0
+  z: 260.3004405074001
+  yaw: -6.1499987
+  pitch: -1.9500015
