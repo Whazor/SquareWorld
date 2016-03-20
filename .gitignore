@@ -7,3 +7,5 @@ server/plugins/SquareWorld.jar
 .idea/uiDesigner.xml
 *.iml
 SquareWorld.iml
+*.log
+*.json
