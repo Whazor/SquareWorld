@@ -37,7 +37,9 @@ public class createCityCommandExecutor implements CommandExecutor{
                 Player player = (Player) sender;
 
 //                generate the city in destad
-                City stad = new City(1234,0,0,Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+//                City stad = new City(1234,0,0,Integer.parseInt(args[1]),Integer.parseInt(args[2]));
+                City stad = new City(1234,0,0,150,150);
+
                 short[][] destad = stad.generate();
 
 //                get the players location and store them in x z integers
@@ -51,11 +53,10 @@ public class createCityCommandExecutor implements CommandExecutor{
 
 
                 Block bc = loc.getBlock();
-                bc.setType(Material.getMaterial(1));
+                bc.setType(Material.STONE);
                 loc.setX(loc.getX() + 2);
                 bc = loc.getBlock();
-                bc.setType(Material.getMaterial(2));
-
+                bc.setType(Material.getMaterial("GRASS"));
 
                 System.out.println("set location stone");
 
@@ -65,15 +66,16 @@ public class createCityCommandExecutor implements CommandExecutor{
                     short[] xrow = destad[x];
                     for (int z = 0; z < xrow.length; z++) {
                         short value = xrow[z];
-
+                        ly = 1;
                         Location temploc = new Location(lw,lx + x,ly,lz + z);
-                        System.out.println("temploc = " + temploc);
-                        System.out.println("value = " + value);
-                        temploc.setX(loc.getX());
-                        temploc.setZ(loc.getZ());
+//                        System.out.println("temploc = " + temploc);
+//                        System.out.println("value = " + value);
+//                        temploc.setX(loc.getX());
+//                        temploc.setZ(loc.getZ());
 
                         Block b = temploc.getBlock();
-                        b.setType(Material.getMaterial((int) value));
+//                        b.setType(Material.STONE);
+                        b.setType(Material.getMaterial(value));
 
                     }
                 }
