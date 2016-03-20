@@ -154,7 +154,7 @@ public class City extends Settlement {
             for (int i = 0; i < element.length; i++) {
                 short value = element[i];
                 if (value == 1) {
-                    element[i] = 0;
+                    element[i] = 1;
                 }
                 if (value == 0) {
                     element[i] = 2;

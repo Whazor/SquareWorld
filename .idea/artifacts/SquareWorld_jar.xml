@@ -3,8 +3,10 @@
     <output-path>$PROJECT_DIR$/server/plugins</output-path>
     <root id="archive" name="SquareWorld.jar">
       <element id="module-output" name="SquareWorld" />
-      <element id="extracted-dir" path="$PROJECT_DIR$/server/craftbukkit.jar" path-in-jar="/" />
-      <element id="library" level="project" name="com.vividsolutions:jts-core:1.14.0" />
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+      </element>
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jts-core-1.14.0.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>
