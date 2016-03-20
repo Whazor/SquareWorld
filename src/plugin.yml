@@ -3,3 +3,7 @@ version: 1.0.0
 author: Wouter and Nanne
 main: ne.nan.squareworld.Main
 load: startup
+commands:
+   createcity:
+      description: This is a demo command for squareworld.
+      usage: /<command> [player]

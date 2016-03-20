@@ -5,6 +5,9 @@ import ne.nan.squareworld.generators.levels.Region;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -65,5 +68,20 @@ public class Main extends JavaPlugin {
         public Location getFixedSpawnLocation(World world, Random random) {
             return new Location(world, 10, 10, 10);
         }
+
     }
+    @Override
+    public void onEnable() {
+        System.out.println("[wuoter] plugin enabled");
+        this.getCommand("createcity").setExecutor(new createCityCommandExecutor());
+        // TODO Insert logic to be performed when the plugin is enabled
+    }
+
+    @Override
+    public void onDisable() {
+        System.out.println("plugin disabled");
+        // TODO Insert logic to be performed when the plugin is disabled
+    }
+
+
 }
