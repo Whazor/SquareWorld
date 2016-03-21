@@ -15,7 +15,6 @@ import org.bukkit.entity.Player;
  */
 public class createCityCommandExecutor implements CommandExecutor{
 
-
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
         if (cmd.getName().equalsIgnoreCase("createcity")) { // If the player typed /basic then do the following...
@@ -37,8 +36,8 @@ public class createCityCommandExecutor implements CommandExecutor{
                 Player player = (Player) sender;
 
 //                generate the city in destad
-//                City stad = new City(1234,0,0,Integer.parseInt(args[1]),Integer.parseInt(args[2]));
-                City stad = new City(1234,0,0,150,150);
+                City stad = new City(1234,0,0,Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+//                City stad = new City(1234,0,0,150,150);
 
                 short[][] destad = stad.generate();
 
