@@ -107,7 +107,7 @@ public class City extends Settlement {
             int minlengthx = 0;
             int minlengthy = 0;
 
-            city[c_x][c_y] = 1;
+            city[c_x][c_y] = 35;
 //            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
             while(c_x != centercoordinatex || c_y != centercoordinatey) {
 
@@ -122,11 +122,11 @@ public class City extends Settlement {
                 } else if(c_y < centercoordinatey) {
                     c_y++;
                 }
-                if(city[c_x][c_y] == 1) {
+                if(city[c_x][c_y] == 35) {
                     break;
                 }
                 rollbacklist.add(new int[]{c_x, c_y});
-                city[c_x][c_y] = 1;
+                city[c_x][c_y] = 35;
             }
 
 //            reset the cursor and do the same for the other axis
@@ -147,11 +147,11 @@ public class City extends Settlement {
                     c_x++;
 
                 }
-                if(city[c_x][c_y] == 1) {
+                if(city[c_x][c_y] == 35) {
                     break;
                 }
                 rollbacklist.add(new int[]{c_x, c_y});
-                city[c_x][c_y] = 1;
+                city[c_x][c_y] = 35;
             }
 
             if(minlengthx < 15 || minlengthy < 15) {
@@ -160,12 +160,38 @@ public class City extends Settlement {
                 }
             }
         }
+        /**
+         * Add surounding black blocks around the white ones as a road.
+         */
+        for (int x = 0; x < city.length; x++) {
+            for (int y = 0; y < city[x].length; y++) {
+                short value = city[x][y];
+                if (value == 35) {
+//                    value is white thus a road, now we will make the surroundings black
+
+
+                    for(int sx = x-1; sx <= x+1; sx++) {
+                        for(int sy = x-1; sy <= x+1; sy++) {
+//                            prevent out of bounds exception on underlying array
+                            if(sy >= 0 && sx >= 0 && sx <= sizeX && sy <= sizeY) {
+//                                make pixel black if the underlying pixel is empty
+                                if(city[sx][sy] == 0) {
+                                    city[sx][sy] = 173;
+                                }
+                            }
+                        }
+                    }
+                    city[x][y] = 1;
+                }
+            }
+        }
+
+        /**
+         * Change 0 values to grass color, id = 2
+         */
         for(short[] element : city) {
             for (int i = 0; i < element.length; i++) {
                 short value = element[i];
-                if (value == 1) {
-                    element[i] = 1;
-                }
                 if (value == 0) {
                     element[i] = 2;
                 }

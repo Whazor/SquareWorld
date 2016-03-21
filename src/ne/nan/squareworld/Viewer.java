@@ -140,18 +140,24 @@ public class Viewer {
                     for (int i = 0; i < chunk.length; i++) {
                         for (int j = 0; j < chunk[i].length; j++) {
                             switch (chunk[i][j]) {
-                                case GRASS:
+                                case GRASS: //green on top id = 2
                                     gl2.glColor3ub((byte)(24) , (byte)(174) , (byte)(24));
 //                                    gl2.glColor3f( 0.0416f, 0.0057471264f, 0.041666668f);
                                     break;
-                                case STONE:
+                                case STONE: // grey id = 1
                                     gl2.glColor3ub((byte)(140) , (byte)(140) , (byte)(140));
                                     break;
-                                case DIRT:
+                                case DIRT: // brown id = 3
                                     gl2.glColor3ub((byte)(125) , (byte)(75) , (byte)(0));
                                     break;
-                                default: // nothing
+                                case COAL_BLOCK: // black, id = 173
                                     gl2.glColor3f( 0, 0, 0 );
+                                    break;
+                                case WOOL: // white, id = 35
+                                    gl2.glColor3f( 255, 255, 255 );
+                                    break;
+                                default: // white id = 1
+                                    gl2.glColor3f( 255, 255, 255 );
                             }
                             rect(gl2, x + i, y + j, 1, 1);
                         }
