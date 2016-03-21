@@ -8,13 +8,23 @@ import java.util.*;
  * Created by s133781 on 26-2-16.
  */
 public class City extends Settlement {
+    private final int randompoints;
+    private final int prunedistance;
+
+    public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance) {
+        super(zaad, x, y, width, height);
+        this.randompoints = randompoints;
+        this.prunedistance = prunedistance;
+    }
     public City(int zaad, int x, int y, int width, int height) {
         super(zaad, x, y, width, height);
+        this.randompoints = 100;
+        this.prunedistance = 40;
     }
 
     @Override
     public short[][] generate() {
-        return generateCity(x, y, width, height, 100);
+        return generateCity(x, y, width, height, randompoints, prunedistance);
     }
 //    constructor met settlement
 //    x,y
@@ -31,7 +41,7 @@ public class City extends Settlement {
         return (int) Math.sqrt((coord1[0]-coord2[0])*(coord1[0]-coord2[0]) + (coord1[1]-coord2[1])*(coord1[1]-coord2[1]));
     }
 
-    private short[][] generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints) {
+    private short[][] generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints, int prunedistance) {
 //        short[][] intersections = new short[randomPoints][2];
 //
 ////        Create randompoints to create the city around
@@ -57,7 +67,7 @@ public class City extends Settlement {
             int[] coord = iterator.next();
 //            loop through all the coordtoo coordinations and check the distance, if the distance is too large remove the coordinate and break out of the loop
             for(int[] coordtoo : intersections) {
-                if(distance(coord,coordtoo) < 40 && distance(coord,coordtoo) != 0) {
+                if(distance(coord,coordtoo) < prunedistance && distance(coord,coordtoo) != 0) {
                     iterator.remove();
                     break;
                 }
