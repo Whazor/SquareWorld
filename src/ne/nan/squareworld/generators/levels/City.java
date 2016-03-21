@@ -224,8 +224,14 @@ public class City extends Settlement {
     }
 
 
+    int minSizeBuilding;
 
+    private short[][] placeBuildings(int width, int height) {
+        short[][] city = new short[width][height];
 
+        return city;
+
+    }
 
 
 
