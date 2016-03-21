@@ -12,9 +12,46 @@ public class City extends Settlement {
         super(zaad, x, y, width, height);
     }
 
+    private class Hash {
+        private final int zaad;
+        private final int x;
+        private final int y;
+        private final int width;
+        private final int height;
+
+        public Hash(int zaad, int x, int y, int width, int height){
+            this.zaad = zaad;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(zaad, x, y, width, height);
+        }
+    }
+
+    static Map<Hash, short[][]> cache = new HashMap<>();
+
+    public Hash hash() {
+        return new Hash(zaad, x, y, width, height);
+    }
+
     @Override
     public short[][] generate() {
-        return generateCity(x, y, width, height, 100);
+        if(cache.containsKey(hash())) {
+            return cache.get(hash());
+        }
+
+        if(cache.size() > 20) {
+            cache.remove(cache.keySet().iterator().next());
+        }
+
+        short[][] shorts = generateCity(x, y, width, height, 100);
+        cache.put(hash(), shorts);
+        return shorts;
     }
 //    constructor met settlement
 //    x,y
