@@ -22,9 +22,50 @@ public class City extends Settlement {
         this.prunedistance = 40;
     }
 
+    private class Hash {
+        private final int zaad;
+        private final int x;
+        private final int y;
+        private final int width;
+        private final int height;
+        private final int randompoints;
+        private final int prunedistance;
+
+        public Hash(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance){
+            this.zaad = zaad;
+            this.x = x;
+            this.y = y;
+            this.width = width;
+            this.height = height;
+            this.randompoints = randompoints;
+            this.prunedistance = prunedistance;
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(zaad, x, y, width, height, randompoints, prunedistance);
+        }
+    }
+
+    static Map<Hash, short[][]> cache = new HashMap<>();
+
+    public Hash hash() {
+        return new Hash(zaad, x, y, width, height, randompoints, prunedistance);
+    }
+
     @Override
     public short[][] generate() {
-        return generateCity(x, y, width, height, randompoints, prunedistance);
+        if(cache.containsKey(hash())) {
+            return cache.get(hash());
+        }
+
+        if(cache.size() > 20) {
+            cache.remove(cache.keySet().iterator().next());
+        }
+
+        short[][] shorts = generateCity(x, y, width, height, randompoints, prunedistance);
+        cache.put(hash(), shorts);
+        return shorts;
     }
 //    constructor met settlement
 //    x,y

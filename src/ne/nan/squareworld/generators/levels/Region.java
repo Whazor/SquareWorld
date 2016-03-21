@@ -22,11 +22,11 @@ public class Region {
     public Region(long seed) {
         this.seed = seed;
     }
-    int minCitySize = 300;
-    int maxCitySize = 500;
-    int maxCities = 100;
-    int minCities = 50;
-    int regionSize = (maxCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
+    int minCitySize = 1000;
+    int maxCitySize = 3000;
+    int maxCities = 20;
+    int minCities = 20;
+    int regionSize = (minCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
 
     LinkedHashMap<Coordinate, SpatialIndex> map = new LinkedHashMap<>();
 
