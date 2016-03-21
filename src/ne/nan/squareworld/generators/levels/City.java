@@ -3,6 +3,7 @@ package ne.nan.squareworld.generators.levels;
 import ne.nan.squareworld.model.Settlement;
 
 import java.util.*;
+import java.util.function.Function;
 
 /**
  * Created by s133781 on 26-2-16.
@@ -19,7 +20,7 @@ public class City extends Settlement {
     public City(int zaad, int x, int y, int width, int height) {
         super(zaad, x, y, width, height);
         this.randompoints = 100;
-        this.prunedistance = 40;
+        this.prunedistance = 60;
     }
 
     private class Hash {
@@ -82,6 +83,33 @@ public class City extends Settlement {
         return (int) Math.sqrt((coord1[0]-coord2[0])*(coord1[0]-coord2[0]) + (coord1[1]-coord2[1])*(coord1[1]-coord2[1]));
     }
 
+    /**
+     *
+     * @param x
+     * @param y
+     * @param distance
+     * @param city
+     * @param sizeX
+     * @param sizeY
+     * @return empty array when no result found, xy with rects when they have been found
+     */
+    private int[] neighboorroadhorizontal(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
+        for(int x1 = x - distance; x1 < sizeX; x1++) {
+            if(city[x1][y] != 0 && x1 != x) {
+                return(new int[] {x1,y});
+            }
+        }
+        return(new int[] {});
+    }
+    private int[] neighboorroadvertical(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
+        for(int y1 = y - distance; y1 < sizeY; y1++) {
+            if(city[x][y1] != 0 && y1 != y) {
+                return(new int[] {x,y1});
+            }
+        }
+        return(new int[] {});
+    }
+
     private short[][] generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints, int prunedistance) {
 //        short[][] intersections = new short[randomPoints][2];
 //
@@ -97,8 +125,8 @@ public class City extends Settlement {
         Random rand = new Random(zaad);
         List<int[]> intersections = new ArrayList<>();
         for(int i = 0; i <= randomPoints; i++) {
-            int x = rand.nextInt(sizeX);
-            int y = rand.nextInt(sizeY);
+            int x = rand.nextInt(sizeX-4)+2;
+            int y = rand.nextInt(sizeY-4)+2;
             intersections.add(new int[]{x, y, i});
         }
 
@@ -138,6 +166,8 @@ public class City extends Settlement {
         int centercoordinatex = centercoordinate[0];
         int centercoordinatey = centercoordinate[1];
 
+
+
         city[centercoordinatex][centercoordinatey] = 1;
         for(int[] coordtoo : intersections) {
 //            city[coordtoo[0]][coordtoo[1]] = 1;
@@ -149,9 +179,10 @@ public class City extends Settlement {
             int minlengthy = 0;
 
             city[c_x][c_y] = 35;
+
 //            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
             while(c_x != centercoordinatex || c_y != centercoordinatey) {
-
+                boolean horizontal = true;
                 if(c_x > centercoordinatex) {
                     c_x--;
                     minlengthx++;
@@ -160,14 +191,18 @@ public class City extends Settlement {
                     minlengthx++;
                 } else if(c_y > centercoordinatey) {
                     c_y--;
+                    horizontal = false;
                 } else if(c_y < centercoordinatey) {
                     c_y++;
+                    horizontal = false;
                 }
                 if(city[c_x][c_y] == 35) {
                     break;
                 }
                 rollbacklist.add(new int[]{c_x, c_y});
                 city[c_x][c_y] = 35;
+
+
             }
 
 //            reset the cursor and do the same for the other axis
@@ -211,12 +246,13 @@ public class City extends Settlement {
 //                    value is white thus a road, now we will make the surroundings black
 
 
-                    for(int sx = x-1; sx <= x+1; sx++) {
-                        for(int sy = x-1; sy <= x+1; sy++) {
+                    for(int sx = x-2; sx <= x+2; sx++) {
+                        for(int sy = y-2; sy <= y+2; sy++) {
 //                            prevent out of bounds exception on underlying array
-                            if(sy >= 0 && sx >= 0 && sx <= sizeX && sy <= sizeY) {
+                            if(sy >= 0 && sx >= 0 && sx <= sizeX-1 && sy <= sizeY-1) {
 //                                make pixel black if the underlying pixel is empty
                                 if(city[sx][sy] == 0) {
+
                                     city[sx][sy] = 173;
                                 }
                             }
@@ -248,6 +284,8 @@ public class City extends Settlement {
 //        }
         return city;
     }
+
+
 
 
     int minSizeBuilding;
