@@ -3,6 +3,8 @@ package ne.nan.squareworld.generators.levels;
 import ne.nan.squareworld.model.Settlement;
 
 import java.util.*;
+import java.util.function.IntSupplier;
+
 
 /**
  * Created by s133781 on 26-2-16.
@@ -397,21 +399,56 @@ public class City extends Settlement {
 //                element[i] = 1;
 //            }
 //        }
+        short[][] shorts = placeBuildings(1337, 100, 100);
+        for (int i = 0; i < shorts.length; i++) {
+            for (int j = 0; j < shorts[i].length; j++) {
+                if(shorts[i][j] > 0)
+                    city[i][j] = shorts[i][j];
+            }
+        }
+
         return city;
     }
 
 
+    int minSizeBuilding = 10;
+    int maxSizeBuilding = 50;
 
-
-    int minSizeBuilding;
-
-    private short[][] placeBuildings(int width, int height) {
+    private short[][] placeBuildings(long zaad, int width, int height) {
         short[][] city = new short[width][height];
 
+        //
+        Random random = new Random(zaad);
+
+        int ma = maxSizeBuilding - minSizeBuilding;
+
+        IntSupplier zaadSupplier = () -> minSizeBuilding + ma/2 + random.nextInt(ma/2);
+
+        Building topleft = new Building(zaadSupplier.getAsInt());//random building;
+        Building topright = new Building(zaadSupplier.getAsInt());
+        Building bottomleft = new Building(zaadSupplier.getAsInt());
+        Building bottomright = new Building(zaadSupplier.getAsInt());
+
+        int left = topleft.y() - bottomleft.y();
+        int top = topleft.x() - topright.x();
+        int bottom = bottomleft.x() - bottomright.x();
+        int right = topright.y() - bottomright.y();
+
+        placeBuilding(city, topleft, 0, 0);
+        placeBuilding(city, topright, width - topright.x(), 0);
+        placeBuilding(city, bottomleft, 0, height - bottomleft.y());
+        placeBuilding(city, bottomright, width - bottomright.x(), height - bottomright.y());
+
         return city;
 
     }
 
-
+    private void placeBuilding(short[][] city, Building build, int x, int y) {
+        for (int i = 0; i < build.x(); i++) {
+            for (int j = 0; j < build.y(); j++) {
+                city[x + i][y + j] = 3;
+            }
+        }
+    }
 
 }
