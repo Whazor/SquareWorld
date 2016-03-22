@@ -59,11 +59,11 @@ world-settings:
   default:
     verbose: true
     merge-radius:
-      exp: 3.0
       item: 2.5
-    chunks-per-tick: 650
-    clear-tick-list: false
+      exp: 3.0
     item-despawn-rate: 6000
+    arrow-despawn-rate: 1200
+    enable-zombie-pigmen-portal-spawns: true
     anti-xray:
       enabled: true
       engine-mode: 1
@@ -122,12 +122,12 @@ world-settings:
       tile: 50
       entity: 50
     hanging-tick-frequency: 100
-    enable-zombie-pigmen-portal-spawns: true
-    arrow-despawn-rate: 1200
+    wither-spawn-sound-radius: 0
     view-distance: 10
+    chunks-per-tick: 650
+    clear-tick-list: false
+    zombie-aggressive-towards-villager: true
     max-entity-collisions: 8
     dragon-death-sound-radius: 0
     seed-village: 10387312
     seed-feature: 14357617
-    zombie-aggressive-towards-villager: true
-    wither-spawn-sound-radius: 0
