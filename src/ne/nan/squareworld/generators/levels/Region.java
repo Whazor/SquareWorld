@@ -24,10 +24,10 @@ public class Region {
     }
     int minCitySize = 200;
     int maxCitySize = 400;
-    int minCities = 20;
-    int maxCities = 50;
+    int minCities = 30;
+    int maxCities = 60;
 
-    int regionSize = (minCitySize/2) * chunkSize; // has to be divided by chunksize for simplification purposes
+    int regionSize = 200 * chunkSize; // has to be divided by chunksize for simplification purposes
 
     LinkedHashMap<Coordinate, SpatialIndex> map = new LinkedHashMap<>();
 
@@ -65,8 +65,8 @@ public class Region {
             boolean isIntersected;
             do {
                 isIntersected = false;
-                int city_x = Math.round(Math.round(random.nextFloat() * regionSize) / 16) * 16;
-                int city_y = Math.round(Math.round(random.nextFloat() * regionSize) / 16) * 16;
+                int city_x = Math.round(Math.round(random.nextFloat() * (regionSize-maxCitySize)) / 16) * 16;
+                int city_y = Math.round(Math.round(random.nextFloat() * (regionSize-maxCitySize)) / 16) * 16;
 
                 int difference = maxCitySize - minCitySize;
 
