@@ -10,7 +10,7 @@ import com.vividsolutions.jts.geom.Polygon;
  */
 public abstract class Settlement {
     public final int zaad;
-    public final int x;
+    public int x;
     public final int y;
     public final int width;
     public final int height;

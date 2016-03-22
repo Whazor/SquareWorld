@@ -22,8 +22,8 @@ public class Region {
     public Region(long seed) {
         this.seed = seed;
     }
-    int minCitySize = 300;
-    int maxCitySize = 500;
+    int minCitySize = 200;
+    int maxCitySize = 400;
     int minCities = 20;
     int maxCities = 50;
 

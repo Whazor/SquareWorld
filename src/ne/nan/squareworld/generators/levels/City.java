@@ -11,6 +11,7 @@ import java.util.function.Function;
 public class City extends Settlement {
     private final int randompoints;
     private final int prunedistance;
+    private final int roaddistance = 10;
 
     public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance) {
         super(zaad, x, y, width, height);
@@ -20,7 +21,7 @@ public class City extends Settlement {
     public City(int zaad, int x, int y, int width, int height) {
         super(zaad, x, y, width, height);
         this.randompoints = 100;
-        this.prunedistance = 60;
+        this.prunedistance = 45;
     }
 
     private class Hash {
@@ -93,23 +94,60 @@ public class City extends Settlement {
      * @param sizeY
      * @return empty array when no result found, xy with rects when they have been found
      */
-    private int[] neighboorroadhorizontal(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
-        for(int x1 = x - distance; x1 < sizeX; x1++) {
-            if(city[x1][y] != 0 && x1 != x) {
-                return(new int[] {x1,y});
+    private int neighboorroadhorizontal(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
+        for(int x1 = x - distance; x1 < x+distance; x1++) {
+            if(x1 >= 0 && x1 <= sizeX-1 ) {
+                if(city[x1][y] != 0 && x1 != x) {
+                    return(x1);
+                }
             }
         }
-        return(new int[] {});
+        return(0);
     }
-    private int[] neighboorroadvertical(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
-        for(int y1 = y - distance; y1 < sizeY; y1++) {
-            if(city[x][y1] != 0 && y1 != y) {
-                return(new int[] {x,y1});
+    private int neighboorroadvertical(int x,int y, int distance, short[][] city, int sizeX, int sizeY) {
+        for(int y1 = y - distance; y1 < y+distance; y1++) {
+            if(y1 >= 0 && y1 <= sizeY-1 ) {
+                if(city[x][y1] != 0 && y1 != y) {
+                    return(y1);
+                }
             }
         }
-        return(new int[] {});
+        return(0);
     }
+    private short[][] drawrect(int x_1,int y_1, int x_2, int y_2, short[][] city, short value) {
+        int lowestx;
+        int highestx;
+        int lowesty;
+        int highesty;
+        if(x_1 < x_2) {
+             lowestx = x_1;
+             highestx = x_2;
+        } else {
+             lowestx = x_2;
+             highestx = x_1;
+        }
+        if(y_1 < y_2) {
+             lowesty = y_1;
+             highesty = y_2;
+        } else {
+             lowesty = y_2;
+             highesty = y_1;
+        }
+        int count = 0;
+        for(int x = lowestx; x <= highestx; x++) {
+            for(int y = lowesty; y <= highesty; y++) {
 
+                if(count == 2) {
+                    city[x][y] = 1;
+                    count = 0;
+                } else {
+                    city[x][y] = value;
+                    count++;
+                }
+            }
+        }
+        return city;
+    }
     private short[][] generateCity(int startingX, int startingY, int sizeX, int sizeY, int randomPoints, int prunedistance) {
 //        short[][] intersections = new short[randomPoints][2];
 //
@@ -177,7 +215,7 @@ public class City extends Settlement {
             rollbacklist.add(new int[]{c_x, c_y});
             int minlengthx = 0;
             int minlengthy = 0;
-
+            int count = 0;
             city[c_x][c_y] = 35;
 
 //            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
@@ -200,8 +238,32 @@ public class City extends Settlement {
                     break;
                 }
                 rollbacklist.add(new int[]{c_x, c_y});
-                city[c_x][c_y] = 35;
+                if(count == 2) {
+                    city[c_x][c_y] = 1;
+                    count = 0;
+                } else {
+                    city[c_x][c_y] = 35;
+                    count++;
+                }
+                if(!horizontal) {
+                    int temp = neighboorroadhorizontal(c_x,c_y,roaddistance,city,sizeX,sizeY);
 
+                    if(temp != 0) {
+//                        city[temp][c_y] = 3;
+//                        for loop from t_x to c_x then break out of the loop
+                        city = drawrect(c_x,c_y,temp,c_y,city, (short) 35);
+                        break;
+                    }
+                } else {
+                    int temp = neighboorroadvertical(c_x, c_y, roaddistance, city, sizeX, sizeY);
+
+                    if(temp != 0) {
+//                        city[c_x][temp] = 3;
+//                        for loop from t_x to c_x then break out of the loop
+                        city = drawrect(c_x,c_y,c_x,temp,city, (short) 35);
+                        break;
+                    }
+                }
 
             }
 
@@ -209,7 +271,7 @@ public class City extends Settlement {
             c_x = coordtoo[0];
             c_y = coordtoo[1];
             while (c_x != centercoordinatex || c_y != centercoordinatey) {
-
+                boolean horizontal = false;
                 if(c_y > centercoordinatey) {
                     c_y--;
                     minlengthy++;
@@ -218,23 +280,50 @@ public class City extends Settlement {
                     minlengthy++;
                 } else if(c_x > centercoordinatex) {
                     c_x--;
+                    horizontal = true;
 
                 } else if(c_x < centercoordinatex) {
                     c_x++;
+                    horizontal = true;
 
                 }
                 if(city[c_x][c_y] == 35) {
                     break;
                 }
                 rollbacklist.add(new int[]{c_x, c_y});
-                city[c_x][c_y] = 35;
-            }
+                if(count == 2) {
+                    city[c_x][c_y] = 1;
+                    count = 0;
+                } else {
+                    city[c_x][c_y] = 35;
+                    count++;
+                }
+                if(!horizontal) {
+                    int temp = neighboorroadhorizontal(c_x,c_y,roaddistance,city,sizeX,sizeY);
 
-            if(minlengthx < 15 || minlengthy < 15) {
-                for(int[] co: rollbacklist) {
-                    city[co[0]][co[1]] = 0;
+                    if(temp != 0) {
+//                        city[temp][c_y] = 3;
+//                        for loop from t_x to c_x then break out of the loop
+                        city = drawrect(c_x,c_y,temp,c_y,city, (short) 35);
+                        break;
+                    }
+                } else {
+                    int temp = neighboorroadvertical(c_x, c_y, roaddistance, city, sizeX, sizeY);
+
+                    if(temp != 0) {
+//                        city[c_x][temp] = 3;
+//                        for loop from t_x to c_x then break out of the loop
+                        city = drawrect(c_x,c_y,c_x,temp,city, (short) 35);
+                        break;
+                    }
                 }
             }
+
+//            if(minlengthx < 15 || minlengthy < 15) {
+//                for(int[] co: rollbacklist) {
+//                    city[co[0]][co[1]] = 0;
+//                }
+//            }
         }
         /**
          * Add surounding black blocks around the white ones as a road.
@@ -258,7 +347,7 @@ public class City extends Settlement {
                             }
                         }
                     }
-                    city[x][y] = 1;
+//                    city[x][y] = 1;
                 }
             }
         }
@@ -272,8 +361,20 @@ public class City extends Settlement {
                 if (value == 0) {
                     element[i] = 2;
                 }
+                if (value == 1) {
+                    element[i] = 173;
+                }
             }
         }
+//        for (int i1 = 0; i1 < city.length; i1++) {
+//            short[] element = city[i1];
+//            for (int i = 0; i < element.length; i++) {
+//                short value = element[i];
+//                if (0 == i1 || i == 0 || i1 == sizeX-1 || i == sizeY-1) {
+//                    element[i] = 173;
+//                }
+//            }
+//        }
 //        public void drawrect(int[] a,int[] b) {
 //
 //    }
