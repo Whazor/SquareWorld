@@ -24,12 +24,12 @@ public class createCityCommandExecutor implements CommandExecutor{
 //                check if there were enough arguments
 //                correct arguments: /creatcity x y
 
-                if (args.length > 2) {
-                    sender.sendMessage("Too many arguments!");
+                if (args.length > 7) {
+                    sender.sendMessage("Too many arguments! /createcity <width> <height> <seed> <intersections> <prunedistance> <roadlatchdistance> <minblockwidth>");
                     return false;
                 }
-                if (args.length < 2) {
-                    sender.sendMessage("Not enough arguments!");
+                if (args.length < 7) {
+                    sender.sendMessage("Not enough arguments! /createcity <width> <height> <seed> <intersections> <prunedistance> <roadlatchdistance> <minblockwidth>");
                     return false;
                 }
                 System.out.println("Starting city creation");
@@ -38,8 +38,13 @@ public class createCityCommandExecutor implements CommandExecutor{
 //                generate the city in destad
                 int sizeX = Integer.parseInt(args[0]);
                 int sizeY = Integer.parseInt(args[1]);
+                int seed = Integer.parseInt(args[2]);
+                int randompoints = Integer.parseInt(args[3]);
+                int prunedistance = Integer.parseInt(args[4]);
+                int roaddistancelatch = Integer.parseInt(args[5]);
+                int roaddistancewidth = Integer.parseInt(args[6]);
 
-                City stad = new City(1234,0,0,Integer.parseInt(args[0]),Integer.parseInt(args[1]));
+                City stad = new City(seed,0,0,sizeX,sizeY,randompoints,prunedistance,roaddistancelatch,roaddistancewidth);
 //                City stad = new City(1234,0,0,150,150);
 
                 short[][] destad = stad.generate();
@@ -68,7 +73,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                     short[] xrow = destad[x];
                     for (int z = 0; z < xrow.length; z++) {
                         short value = xrow[z];
-//                        ly = 1;
+                        ly = 0;
                         Location temploc = new Location(lw,lx + x,ly,lz + z);
 //                        System.out.println("temploc = " + temploc);
 //                        System.out.println("value = " + value);
