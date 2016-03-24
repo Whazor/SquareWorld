@@ -36,12 +36,8 @@ public class Finder {
                 new Coordinate(x2 + chunkSize - 1, y2 + chunkSize - 1));
         List<Settlement> list = (List<Settlement>) block.query(envelope);
 
-//        Stream<Settlement> stream = fl.filter(list.stream(), envelope);
-
         Stream<Settlement> filter = fl.filter(list.stream(), envelope);
 
-//
-//
         Material[][] result = new Material[chunkSize][chunkSize];
         for (int i = 0; i < chunkSize; i++)
             for (int j = 0; j < chunkSize; j++) {
@@ -56,11 +52,8 @@ public class Finder {
             int y3 = y2 - settlement.y;
             for (int i = 0; i < chunkSize; i++) {
                 for (int j = 0; j < chunkSize; j++) {
-                    try {
+                    if(x3 + i < settlement.width && y3 + j < settlement.height) {
                         result[i][j] = Material.getMaterial((int) generate[x3 + i][y3 + j]);
-                    }catch(ArrayIndexOutOfBoundsException ignored) {
-                        // huil
-//                        System.out.println("Faal");
                     }
                 }
             }

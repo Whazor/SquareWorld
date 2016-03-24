@@ -150,11 +150,15 @@ public class Viewer {
                                 case DIRT: // brown id = 3
                                     gl2.glColor3ub((byte)(125) , (byte)(75) , (byte)(0));
                                     break;
+                                case BRICK: // brick
+                                    gl2.glColor3ub( (byte)(125), (byte)(0), (byte)(0) );
+                                    break;
                                 case COAL_BLOCK: // black, id = 173
-                                    gl2.glColor3f( 0, 0, 0 );
+                                    gl2.glColor3ub( (byte)(0), (byte)(0), (byte)(0) );
                                     break;
                                 case WOOL: // white, id = 35
-                                    gl2.glColor3f( 255, 255, 255 );
+//                                    gl2.glColor3f( 255, 255, 255 );
+                                    gl2.glColor3ub( (byte)(255), (byte)(255), (byte)(255) );
                                     break;
                                 default: // white id = 1
                                     gl2.glColor3f( 255, 255, 255 );
