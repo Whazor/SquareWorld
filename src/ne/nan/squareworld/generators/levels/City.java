@@ -5,23 +5,27 @@ import ne.nan.squareworld.model.Settlement;
 import java.util.*;
 import java.util.function.IntSupplier;
 
+
 /**
  * Created by s133781 on 26-2-16.
  */
 public class City extends Settlement {
     private final int randompoints;
-    private final int prunedistance;
-    private final int roaddistance = 10;
+    private int prunedistance = 35;
+    private int roaddistancelatch = 15;
+    private int roaddistancewidth = 20;
 
-    public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance) {
+    public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance, int roaddistancelatch, int roaddistancewidth) {
         super(zaad, x, y, width, height);
         this.randompoints = randompoints;
         this.prunedistance = prunedistance;
+        this.roaddistancewidth = roaddistancewidth;
+        this.roaddistancelatch = roaddistancelatch;
     }
     public City(int zaad, int x, int y, int width, int height) {
         super(zaad, x, y, width, height);
         this.randompoints = 100;
-        this.prunedistance = 45;
+//        this.prunedistance = 45;
     }
 
     private class Hash {
@@ -208,6 +212,13 @@ public class City extends Settlement {
 
         city[centercoordinatex][centercoordinatey] = 1;
         for(int[] coordtoo : intersections) {
+            short[][] backupcity;
+//            System.arraycopy( city, 0, backupcity, 0, city.length );
+
+            backupcity = city.clone();
+            for (int x = 0; x < city.length; x++) {
+                backupcity[x] = city[x].clone();
+            }
 //            city[coordtoo[0]][coordtoo[1]] = 1;
             int c_x = coordtoo[0];
             int c_y = coordtoo[1];
@@ -246,7 +257,7 @@ public class City extends Settlement {
                     count++;
                 }
                 if(!horizontal) {
-                    int temp = neighboorroadhorizontal(c_x,c_y,roaddistance,city,sizeX,sizeY);
+                    int temp = neighboorroadhorizontal(c_x,c_y, roaddistancelatch,city,sizeX,sizeY);
 
                     if(temp != 0) {
 //                        city[temp][c_y] = 3;
@@ -255,7 +266,7 @@ public class City extends Settlement {
                         break;
                     }
                 } else {
-                    int temp = neighboorroadvertical(c_x, c_y, roaddistance, city, sizeX, sizeY);
+                    int temp = neighboorroadvertical(c_x, c_y, roaddistancelatch, city, sizeX, sizeY);
 
                     if(temp != 0) {
 //                        city[c_x][temp] = 3;
@@ -299,7 +310,7 @@ public class City extends Settlement {
                     count++;
                 }
                 if(!horizontal) {
-                    int temp = neighboorroadhorizontal(c_x,c_y,roaddistance,city,sizeX,sizeY);
+                    int temp = neighboorroadhorizontal(c_x,c_y, roaddistancelatch,city,sizeX,sizeY);
 
                     if(temp != 0) {
 //                        city[temp][c_y] = 3;
@@ -308,7 +319,7 @@ public class City extends Settlement {
                         break;
                     }
                 } else {
-                    int temp = neighboorroadvertical(c_x, c_y, roaddistance, city, sizeX, sizeY);
+                    int temp = neighboorroadvertical(c_x, c_y, roaddistancelatch, city, sizeX, sizeY);
 
                     if(temp != 0) {
 //                        city[c_x][temp] = 3;
@@ -319,11 +330,17 @@ public class City extends Settlement {
                 }
             }
 
-//            if(minlengthx < 15 || minlengthy < 15) {
-//                for(int[] co: rollbacklist) {
-//                    city[co[0]][co[1]] = 0;
-//                }
-//            }
+            if(minlengthx < roaddistancewidth || minlengthy < roaddistancewidth) {
+//                System.arraycopy( backupcity, 0, city, 0, backupcity.length );
+                city = backupcity.clone();
+                for (int x = 0; x < city.length; x++) {
+                    city[x] = backupcity[x].clone();
+                }
+
+//                System.out.println("minlength = " +  Math.min(minlengthx,minlengthy));
+                        
+            }
+
         }
         /**
          * Add surounding black blocks around the white ones as a road.
@@ -341,7 +358,6 @@ public class City extends Settlement {
                             if(sy >= 0 && sx >= 0 && sx <= sizeX-1 && sy <= sizeY-1) {
 //                                make pixel black if the underlying pixel is empty
                                 if(city[sx][sy] == 0) {
-
                                     city[sx][sy] = 173;
                                 }
                             }
@@ -366,15 +382,15 @@ public class City extends Settlement {
                 }
             }
         }
-//        for (int i1 = 0; i1 < city.length; i1++) {
-//            short[] element = city[i1];
-//            for (int i = 0; i < element.length; i++) {
-//                short value = element[i];
-//                if (0 == i1 || i == 0 || i1 == sizeX-1 || i == sizeY-1) {
-//                    element[i] = 173;
-//                }
-//            }
-//        }
+        for (int i1 = 0; i1 < city.length; i1++) {
+            short[] element = city[i1];
+            for (int i = 0; i < element.length; i++) {
+                short value = element[i];
+                if (0 == i1 || i == 0 || i1 == sizeX-1 || i == sizeY-1) {
+                    element[i] = 41;
+                }
+            }
+        }
 //        public void drawrect(int[] a,int[] b) {
 //
 //    }
