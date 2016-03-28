@@ -2,6 +2,7 @@ package ne.nan.squareworld.generators.levels;
 
 import com.vividsolutions.jts.geom.Envelope;
 import javafx.scene.paint.Material;
+import ne.nan.squareworld.generators.model.Direction;
 import ne.nan.squareworld.model.Placeable;
 import org.bukkit.material.MaterialData;
 import org.jnbt.*;
@@ -24,12 +25,12 @@ public class Building extends Placeable {
     private int x;
     private int y;
 
-    private static int types = 1;
+    private int dic;
 
-    public Building(int asInt, int type) {
-
+    Building(int asInt, Direction dic, int type) {
         this.asInt = asInt;
         this.type = type;
+        this.dic = dic.toInt();
     }
 
     public int width() {
@@ -52,11 +53,8 @@ public class Building extends Placeable {
 
 
     public MaterialData[][][] generate() {
-        MaterialData[][][] materials = getMaterialDatas(type + "_" + asInt);
-
-        return materials;
+        return getMaterialDatas(type + "_" + asInt + "_" + dic);
     }
-
     public int getX() {
         return x;
     }
@@ -65,7 +63,7 @@ public class Building extends Placeable {
         return y;
     }
 
-    public static int getTypes() {
-        return types;
+    static int getTypes() {
+        return 2;
     }
 }
