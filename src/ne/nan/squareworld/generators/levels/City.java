@@ -25,9 +25,6 @@ public class City extends Settlement {
         ArrayList<Building> arr = new ArrayList<>();
         for (Object objBuild: list) {
             arr.add((Building) objBuild);
-            Building build = (Building) objBuild;
-            Envelope envelope = build.getEnvelope();
-
         }
         return arr;
     }
