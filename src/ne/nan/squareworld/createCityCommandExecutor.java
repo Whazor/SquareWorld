@@ -22,7 +22,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                 sender.sendMessage("This command can only be run by a player.");
             } else {
 //                check if there were enough arguments
-//                correct arguments: /creatcity x y
+//                correct arguments: /creatcity width height
 
                 if (args.length > 7) {
                     sender.sendMessage("Too many arguments! /createcity <width> <height> <seed> <intersections> <prunedistance> <roadlatchdistance> <minblockwidth>");
@@ -49,7 +49,7 @@ public class createCityCommandExecutor implements CommandExecutor{
 
                 short[][] destad = stad.generate();
 
-//                get the players location and store them in x z integers
+//                get the players location and store them in width z integers
 
                 Location loc = player.getLocation();
                 int lx = (int) loc.getX() - sizeX / 2;

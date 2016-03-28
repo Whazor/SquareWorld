@@ -39,7 +39,7 @@ public class Main extends JavaPlugin {
         @Override
         public ChunkData generateChunkData(World world, Random random, int x, int z, BiomeGrid biome) {
             ChunkData data = createChunkData(world);
-//            System.out.println("Chunk: "+x+", "+z);
+//            System.out.println("Chunk: "+width+", "+z);
 
 //            for (int k = 0; k < 100; k++) {
 //                for (int i = 0; i < 16; i++) {
@@ -53,7 +53,9 @@ public class Main extends JavaPlugin {
             for (int i = 0; i < chunk.length; i++) {
                 for (int j = 0; j < chunk[i].length; j++) {
                     for (int k = 0; k < chunk[i][j].length; k++) {
-                        data.setBlock(i, k, j, chunk[i][j][k]);
+                        if(chunk[i][j][k] != null) {
+                            data.setBlock(i, k, j, chunk[i][j][k]);
+                        }
                     }
                 }
             }

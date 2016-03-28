@@ -2,14 +2,10 @@ package ne.nan.squareworld.generators.levels;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
-import ne.nan.squareworld.algos.QuadTree;
-import ne.nan.squareworld.algos.UF;
 import ne.nan.squareworld.model.Settlement;
-import org.bukkit.material.Directional;
 import org.bukkit.material.MaterialData;
 
 import java.util.*;
-import java.util.function.IntSupplier;
 
 
 /**
@@ -22,6 +18,19 @@ public class City extends Settlement {
     private int roaddistancelatch = 15;
     private int roaddistancewidth = 20;
     private Quadtree buildings = new Quadtree();
+
+
+    public List<Building> getBuildings() {
+        List list = buildings.queryAll();
+        ArrayList<Building> arr = new ArrayList<>();
+        for (Object objBuild: list) {
+            arr.add((Building) objBuild);
+            Building build = (Building) objBuild;
+            Envelope envelope = build.getEnvelope();
+
+        }
+        return arr;
+    }
 
 
     public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance, int roaddistancelatch, int roaddistancewidth) {
@@ -42,7 +51,7 @@ public class City extends Settlement {
         return new Hash(zaad, x, y, width, height, randompoints, prunedistance);
     }
 //    constructor met settlement
-//    x,y
+//    width,height
 
     @Override
     public short[][] generate() {
@@ -64,7 +73,7 @@ public class City extends Settlement {
 
     //    seed
 /*
-    We take an x and y for starting points to create the city around
+    We take an width and height for starting points to create the city around
     The city has by default a size of 5000 by 5000
     It is first divided into main sections
 
@@ -165,7 +174,7 @@ public class City extends Settlement {
 //        make sure the points are enough distance away from each other, remove them if they aren't
 
         int[] centercoordinate = {(int) sizeX / 2, (int) sizeY / 2};
-        //store the length of point x to the center in the i variable
+        //store the length of point width to the center in the i variable
         for (int[] coordtoo : intersections) {
             coordtoo[2] = distance(centercoordinate, coordtoo);
         }
@@ -210,7 +219,7 @@ public class City extends Settlement {
             int count = 0;
             city[c_x][c_y] = 35;
 
-//            while the cursor is not on the x axis of the center and the cursor has not seen a 1 spot we move along the x axis
+//            while the cursor is not on the width axis of the center and the cursor has not seen a 1 spot we move along the width axis
             while (c_x != centercoordinatex || c_y != centercoordinatey) {
                 boolean horizontal = true;
                 if (c_x > centercoordinatex) {
@@ -344,7 +353,7 @@ public class City extends Settlement {
                             }
                         }
                     }
-//                    city[x][y] = 1;
+//                    city[width][height] = 1;
                 }
             }
         }
@@ -480,6 +489,7 @@ public class City extends Settlement {
         Envelope search = new Envelope(x, y, 16, 16);
         List list = buildings.query(search);
 
+
         int height = 100;
         MaterialData[][][] data = new MaterialData[16][16][height];
 
@@ -534,12 +544,12 @@ public class City extends Settlement {
         }
     }
     private void placeBuilding(short[][] city, Building build, int x, int y) {
-        Envelope envelope = new Envelope(x, y, build.x(), build.y());
+        Envelope envelope = new Envelope(x, y, build.width(), build.height());
         build.setEnvelope(envelope);
         buildings.insert(envelope, build);
 
-        for (int i = 0; i < build.x(); i++) {
-            for (int j = 0; j < build.y(); j++) {
+        for (int i = 0; i < build.width(); i++) {
+            for (int j = 0; j < build.height(); j++) {
                 city[x + i][y + j] = 3;
             }
         }
