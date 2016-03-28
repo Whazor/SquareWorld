@@ -1,5 +1,6 @@
 package ne.nan.squareworld;
 
+import ne.nan.squareworld.generators.levels.Building;
 import ne.nan.squareworld.generators.levels.City;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
 /**
  * Created by s133781 on 20-3-16.
@@ -87,6 +89,27 @@ public class createCityCommandExecutor implements CommandExecutor{
                     }
                 }
 
+
+                for(Building gebouw: stad.getBuildings()) {
+                    int s_x = gebouw.getX();
+                    int s_y = gebouw.getY();
+                    int width  = gebouw.width();
+                    World lworld = loc.getWorld();
+
+                    MaterialData[][][] materials = gebouw.generate();
+                    for (int x = 0; x < materials.length; x++) {
+                        for (int y = 0; y < materials[x].length; y++) {
+                            for (int z = 0; z < materials[x][y].length; z++) {
+                                Location temploc = new Location(x,y,z);
+                                Block b = temploc.getBlock();
+//                        b.setType(Material.STONE);
+                                b.setType(Material.getMaterial(value));
+                            }
+                        }
+
+                    }
+
+                }
                 return true;
                 // do something
             }
