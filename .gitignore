@@ -1,7 +1,7 @@
 server/world*/
 server/logs*
 out/*
-
+server/plugins/SquareWorld.jar
 
 .idea/workspace.xml
 .idea/uiDesigner.xml
