@@ -1,5 +1,6 @@
 package ne.nan.squareworld.generators.levels;
 
+import com.vividsolutions.jts.index.quadtree.Quadtree;
 import ne.nan.squareworld.algos.QuadTree;
 import ne.nan.squareworld.algos.UF;
 import ne.nan.squareworld.model.Settlement;
@@ -13,7 +14,7 @@ import java.util.function.IntSupplier;
  * Created by s133781 on 26-2-16.
  */
 public class City extends Settlement {
-    static Map<Hash, short[][]> cache = new HashMap<>();
+    private static Map<Integer, short[][]> cache = new HashMap<>();
     private final int randompoints;
     private int prunedistance = 35;
     private int roaddistancelatch = 15;
@@ -41,16 +42,19 @@ public class City extends Settlement {
 
     @Override
     public short[][] generate() {
-        if (cache.containsKey(hash())) {
-            return cache.get(hash());
+        Integer cid = hash().hashCode();
+        if (cache.containsKey(cid)) {
+            return cache.get(cid);
         }
 
-        if (cache.size() > 50) {
-            cache.remove(cache.keySet().iterator().next());
-        }
+//        if (cache.size() > 50) {
+//            cache.remove(cache.keySet().iterator().next());
+//        }
 
+        System.out.println("Cache miss " + x + ","+ y);
         short[][] shorts = generateCity(x, y, width, height, randompoints, prunedistance);
-        cache.put(hash(), shorts);
+        System.out.println(hash().hashCode());
+        cache.put(cid, shorts);
         return shorts;
     }
 
@@ -396,41 +400,32 @@ public class City extends Settlement {
                         boolean space_bottom = true;
 
                         // check top
-                        if(i > 0) {
-                            for (int k = 0; k < size; k++) {
-                                int block = city[i - 1][j+k];
-                                if (block == 173) {
-                                    noroad = false;
-                                    space_top = false;
-                                    break;
-                                }
-                            }
-                        }
-                        // check bottom
-                        if(i + size + 1 < city.length) {
-                            for (int k = 0; k < size; k++) {
-                                int block = city[i + size + 1][j+k];
-                                if (block == 173) {
-                                    noroad = false;
-                                    space_bottom = true;
-                                    break;
-                                }
-                            }
-                        }
-                        // check left
                         if(j > 0) {
                             for (int k = 0; k < size; k++) {
                                 int block = city[i+k][j-1];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_left = true;
+                                    space_bottom = true;
+
                                     break;
                                 }
                             }
                         }
+                        // check bottom
                         if(j + size + 1 < city[i].length) {
                             for (int k = 0; k < size; k++) {
                                 int block = city[i+k][j + size + 1];
+                                if (block == 173) {
+                                    noroad = false;
+                                    space_top = true;
+                                    break;
+                                }
+                            }
+                        }
+                        // check left
+                        if(i > 0) {
+                            for (int k = 0; k < size; k++) {
+                                int block = city[i - 1][j+k];
                                 if (block == 173) {
                                     noroad = false;
                                     space_right = true;
@@ -438,13 +433,24 @@ public class City extends Settlement {
                                 }
                             }
                         }
+                        // check right
+                        if(i + size + 1 < city.length) {
+                            for (int k = 0; k < size; k++) {
+                                int block = city[i + size + 1][j+k];
+                                if (block == 173) {
+                                    noroad = false;
+                                    space_left = true;
+                                    break;
+                                }
+                            }
+                        }
                         if(!noroad) {
                             placeBuilding(city, new Building(size), i, j);
 
-                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
-                            if(space_bottom)   placeRect(city, -1, i+size, j,        size, 1);
-                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
-                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
+//                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
+//                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
+//                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
+//                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
                         }
                     }
                 }
