@@ -17,6 +17,8 @@ public class Building {
     private int asInt;
     private Envelope envelope;
     private int type;
+    private int x;
+    private int y;
 
     public Building(int asInt, int type) {
 
@@ -24,16 +26,18 @@ public class Building {
         this.type = type;
     }
 
-    public int x() {
+    public int width() {
         return asInt;
     }
 
-    public int y() {
+    public int height() {
         return asInt;
     }
 
     public void setEnvelope(Envelope envelope) {
         this.envelope = envelope;
+        this.x = (int)envelope.getMinX();
+        this.y = (int)envelope.getMinY();
     }
 
     public Envelope getEnvelope() {
@@ -54,6 +58,7 @@ public class Building {
 //           @type = type of the building
 
         try {
+            System.out.println("Loading building");
             File f = new File("schematics/" + type + "_" + asInt + ".schematic");
 
             FileInputStream fis = new FileInputStream(f);
@@ -91,5 +96,13 @@ public class Building {
     private static Tag getChildTag(Map<String, Tag> items, String key, Class<? extends Tag> expected) {
         Tag tag = items.get(key);
         return tag;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
     }
 }

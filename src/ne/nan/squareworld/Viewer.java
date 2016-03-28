@@ -89,7 +89,7 @@ public class Viewer {
 //                super.mouseMoved(e);
 //                int nx = e.getX();
 //                int ny = e.getY();
-//                OneTriangle.move(nx - x, ny - y);
+//                OneTriangle.move(nx - width, ny - height);
             }
         });
     }
@@ -141,8 +141,8 @@ public class Viewer {
                     for (int i = 0; i < chunk.length; i++) {
                         for (int j = 0; j < chunk[i].length; j++) {
                             Material item = chunk[i][j][0].getItemType();
-                            for (int k = 0; k < chunk[i][j].length; k++) {
-                                if (chunk[i][j][k] != null) {
+                            for (int k = 1; k < chunk[i][j].length; k++) {
+                                if (chunk[i][j][k] != null && chunk[i][j][k].getItemType() != Material.AIR) {
                                     item = chunk[i][j][k].getItemType();
                                 }
                             }
@@ -159,6 +159,9 @@ public class Viewer {
                                     break;
                                 case BRICK: // brick
                                     gl2.glColor3ub( (byte)(125), (byte)(0), (byte)(0) );
+                                    break;
+                                case WOOD:
+                                    gl2.glColor3ub( (byte)(227), (byte)(136), (byte)(0) );
                                     break;
                                 case COAL_BLOCK: // black, id = 173
                                     gl2.glColor3ub( (byte)(0), (byte)(0), (byte)(0) );
@@ -205,11 +208,11 @@ public class Viewer {
 //        Finder finder = new Finder(fl);
 //
 //
-//        for (int x = 0; x < 1000; x++) {
-//            for (int y = 0; y < 1000; y++) {
-//                switch (finder.getChunk(x, y)) {
+//        for (int width = 0; width < 1000; width++) {
+//            for (int height = 0; height < 1000; height++) {
+//                switch (finder.getChunk(width, height)) {
 //                    case GRASS:
-//                        graphics.drawRect(x*2, y*2, 2, 2);
+//                        graphics.drawRect(width*2, height*2, 2, 2);
 //                        break;
 //                }
 //            }

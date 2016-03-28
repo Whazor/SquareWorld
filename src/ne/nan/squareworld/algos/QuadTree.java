@@ -9,7 +9,7 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
 
     // helper node data type
     private class Node {
-        Key x, y;              // x- and y- coordinates
+        Key x, y;              // width- and height- coordinates
         Node NW, NE, SE, SW;   // four subtrees
         Value value;           // associated data
 
@@ -22,7 +22,7 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
 
 
     /***********************************************************************
-     *  Insert (x, y) into appropriate quadrant
+     *  Insert (width, height) into appropriate quadrant
      ***************************************************************************/
     public void insert(Key x, Key y, Value value) {
         root = insert(0, root, x, y, value);
@@ -32,7 +32,7 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
         if (h == null) {
             return new Node(level, x, y, value);
         }
-            //// if (eq(x, h.x) && eq(y, h.y)) h.value = value;  // duplicate
+            //// if (eq(width, h.width) && eq(height, h.height)) h.value = value;  // duplicate
         else if ( less(x, h.x) &&  less(y, h.y)) h.SW = insert(level + 1, h.SW, x, y, value);
         else if ( less(x, h.x) && !less(y, h.y)) h.NW = insert(level + 1, h.NW, x, y, value);
         else if (!less(x, h.x) &&  less(y, h.y)) h.SE = insert(level + 1, h.SE, x, y, value);
@@ -55,12 +55,12 @@ public class QuadTree<Key extends Comparable<Key>, Value>  {
 //        Key ymin = rect.intervalY.min();
 //        Key xmax = rect.intervalX.max();
 //        Key ymax = rect.intervalY.max();
-//        if (rect.contains(h.x, h.y))
-//            StdOut.println("    (" + h.x + ", " + h.y + ") " + h.value);
-//        if ( less(xmin, h.x) &&  less(ymin, h.y)) query2D(h.SW, rect);
-//        if ( less(xmin, h.x) && !less(ymax, h.y)) query2D(h.NW, rect);
-//        if (!less(xmax, h.x) &&  less(ymin, h.y)) query2D(h.SE, rect);
-//        if (!less(xmax, h.x) && !less(ymax, h.y)) query2D(h.NE, rect);
+//        if (rect.contains(h.width, h.height))
+//            StdOut.println("    (" + h.width + ", " + h.height + ") " + h.value);
+//        if ( less(xmin, h.width) &&  less(ymin, h.height)) query2D(h.SW, rect);
+//        if ( less(xmin, h.width) && !less(ymax, h.height)) query2D(h.NW, rect);
+//        if (!less(xmax, h.width) &&  less(ymin, h.height)) query2D(h.SE, rect);
+//        if (!less(xmax, h.width) && !less(ymax, h.height)) query2D(h.NE, rect);
 //    }
 
     private boolean less(Key k1, Key k2) { return k1.compareTo(k2) <  0; }

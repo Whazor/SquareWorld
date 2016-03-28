@@ -7,6 +7,8 @@
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="extracted-dir" path="$PROJECT_DIR$/lib/jts-core-1.14.0.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/lib/jnbt-1.1.jar" path-in-jar="/" />
+      <element id="dir-copy" path="$PROJECT_DIR$/schematics" />
     </root>
   </artifact>
 </component>
