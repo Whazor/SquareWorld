@@ -382,7 +382,7 @@ public class City extends Settlement {
 //        }
 
 
-        for (int size = 16; size >= 7; size--) {
+        for (int size = 12; size >= 7; size--) {
             for (int i = 0; i < city.length - size; i++) {
                 for (int j = 0; j < city[i].length - size; j++) {
                     boolean fail = false;
@@ -409,7 +409,7 @@ public class City extends Settlement {
                                 int block = city[i+k][j-1];
                                 if (block == 173) {
                                     noroad = false;
-//                                    space_bottom = true;
+                                    space_top = false;
 
                                     break;
                                 }
@@ -421,7 +421,7 @@ public class City extends Settlement {
                                 int block = city[i+k][j + size];
                                 if (block == 173) {
                                     noroad = false;
-//                                    space_top = true;
+                                    space_bottom = false;
                                     break;
                                 }
                             }
@@ -432,7 +432,7 @@ public class City extends Settlement {
                                 int block = city[i - 1][j+k];
                                 if (block == 173) {
                                     noroad = false;
-//                                    space_right = true;
+                                    space_left = false;
                                     break;
                                 }
                             }
@@ -443,7 +443,7 @@ public class City extends Settlement {
                                 int block = city[i + size][j+k];
                                 if (block == 173) {
                                     noroad = false;
-//                                    space_left = true;
+                                    space_right = false;
                                     break;
                                 }
                             }
@@ -451,10 +451,10 @@ public class City extends Settlement {
                         if(!noroad) {
                             placeBuilding(city, new Building(size,0), i, j);
 
-                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
-                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
-                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
-                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
+//                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
+//                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
+//                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
+//                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
                         }
                     }
                 }
@@ -480,7 +480,8 @@ public class City extends Settlement {
         Envelope search = new Envelope(x, y, 16, 16);
         List list = buildings.query(search);
 
-        MaterialData[][][] data = new MaterialData[16][16][100];
+        int height = 100;
+        MaterialData[][][] data = new MaterialData[16][16][height];
 
 
         for (Object obj : list) {
@@ -500,8 +501,9 @@ public class City extends Settlement {
 
                 for (int i = buildX; i < buildX + maxX; i++) {
                     for (int j = buildY; j < buildY + maxY; j++) {
-                        for (int k = 0; k < build[i][j].length; k++) {
-                            data[minX + i][minY + j][k] = build[i][j][k];
+                        for (int k = 0; k < Math.min(height, build[i][j].length); k++) {
+                            MaterialData data1 = build[i][j][k];
+                            data[i - minX][j - minY][k] = data1;
                         }
                     }
 //                    System.arraycopy(build[i], buildY, data[minX + i], minY + buildY, buildY + maxY - buildY);
