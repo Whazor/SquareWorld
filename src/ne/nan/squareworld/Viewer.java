@@ -141,39 +141,41 @@ public class Viewer {
                     for (int i = 0; i < chunk.length; i++) {
                         for (int j = 0; j < chunk[i].length; j++) {
                             Material item = chunk[i][j][0].getItemType();
-                            for (int k = 1; k < chunk[i][j].length; k++) {
+                            for (int k = 0; k < chunk[i][j].length; k++) {
                                 if (chunk[i][j][k] != null && chunk[i][j][k].getItemType() != Material.AIR) {
                                     item = chunk[i][j][k].getItemType();
                                 }
                             }
-                            switch (item) {
-                                case GRASS: //green on top id = 2
-                                    gl2.glColor3ub((byte)(24) , (byte)(174) , (byte)(24));
+                            if (item != null) {
+                                switch (item) {
+                                    case GRASS: //green on top id = 2
+                                        gl2.glColor3ub((byte) (24), (byte) (174), (byte) (24));
 //                                    gl2.glColor3f( 0.0416f, 0.0057471264f, 0.041666668f);
-                                    break;
-                                case STONE: // grey id = 1
-                                    gl2.glColor3ub((byte)(140) , (byte)(140) , (byte)(140));
-                                    break;
-                                case DIRT: // brown id = 3
-                                    gl2.glColor3ub((byte)(125) , (byte)(75) , (byte)(0));
-                                    break;
-                                case BRICK: // brick
-                                    gl2.glColor3ub( (byte)(125), (byte)(0), (byte)(0) );
-                                    break;
-                                case WOOD:
-                                    gl2.glColor3ub( (byte)(227), (byte)(136), (byte)(0) );
-                                    break;
-                                case COAL_BLOCK: // black, id = 173
-                                    gl2.glColor3ub( (byte)(0), (byte)(0), (byte)(0) );
-                                    break;
-                                case WOOL: // white, id = 35
+                                        break;
+                                    case STONE: // grey id = 1
+                                        gl2.glColor3ub((byte) (140), (byte) (140), (byte) (140));
+                                        break;
+                                    case DIRT: // brown id = 3
+                                        gl2.glColor3ub((byte) (125), (byte) (75), (byte) (0));
+                                        break;
+                                    case BRICK: // brick
+                                        gl2.glColor3ub((byte) (125), (byte) (0), (byte) (0));
+                                        break;
+                                    case WOOD:
+                                        gl2.glColor3ub((byte) (227), (byte) (136), (byte) (0));
+                                        break;
+                                    case COAL_BLOCK: // black, id = 173
+                                        gl2.glColor3ub((byte) (0), (byte) (0), (byte) (0));
+                                        break;
+                                    case WOOL: // white, id = 35
 //                                    gl2.glColor3f( 255, 255, 255 );
-                                    gl2.glColor3ub( (byte)(255), (byte)(255), (byte)(255) );
-                                    break;
-                                default: // white id = 1
-                                    gl2.glColor3f( 255, 255, 255 );
+                                        gl2.glColor3ub((byte) (255), (byte) (255), (byte) (255));
+                                        break;
+                                    default: // white id = 1
+                                        gl2.glColor3f(255, 255, 255);
+                                }
+                                rect(gl2, x + i, y + j, 1, 1);
                             }
-                            rect(gl2, x + i, y + j, 1, 1);
                         }
                     }
                 }

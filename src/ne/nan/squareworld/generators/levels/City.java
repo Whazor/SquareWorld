@@ -386,9 +386,17 @@ public class City extends Settlement {
 //        }
 
 
-        for (int size = 12; size >= 7; size--) {
-            for (int i = 0; i < city.length - size; i++) {
-                for (int j = 0; j < city[i].length - size; j++) {
+        Random rnd = new Random(zaad);
+
+            for (int i = 0; i < city.length - 12; i++) {
+                for (int j = 0; j < city[i].length - 12; j++) {
+                    LinkedList<Integer> integers = new LinkedList<>();
+                    for (int k = 7; k <= 12; k++) {
+                        integers.add(k);
+                    }
+                    Collections.shuffle(integers, rnd);
+                    for (int size: integers) {
+//                    for (int size = 12; size >= 7; size--) {
                     boolean fail = false;
                     next:
                     for (int k = 0; k < size; k++) {
@@ -492,7 +500,8 @@ public class City extends Settlement {
             Building building = (Building) obj;
             Envelope envelope = building.getEnvelope();
             if (envelope.intersects(search)) {
-                System.out.println("actually intersects...");
+//                System.out.println(building.getX() + " " + building.getY() + " - " + building.width());
+
                 MaterialData[][][] build = building.generate();
                 Envelope intersection = envelope.intersection(search);
                 int searchX = (int) search.getMinX();
@@ -506,8 +515,8 @@ public class City extends Settlement {
 
                 for (int i = minX; i < maxX; i++) {
                     for (int j = minY; j < maxY; j++) {
-                        int buildX = i - searchX;
-                        int buildY = j - searchY;
+                        int buildX = i - building.getX();
+                        int buildY = j - building.getY();
 
                         if(buildX < build.length && buildY < build[buildX].length) {
                             for (int k = 0; k < Math.min(height, build[buildX][buildY].length); k++) {

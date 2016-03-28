@@ -9,6 +9,7 @@ import javax.annotation.processing.FilerException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -60,12 +61,18 @@ public class Building {
 //           @type = type of the building
 
         try {
-            System.out.println("Loading building");
-            System.out.println("schematics/" + type + "_" + asInt + ".schematic");
-            File f = new File("schematics/" + type + "_" + asInt + ".schematic");
+            InputStream input = getClass().getResourceAsStream("/schematics/" + type + "_" + asInt + ".schematic");
 
-            FileInputStream fis = new FileInputStream(f);
-            NBTInputStream nbt = new NBTInputStream(fis);
+            NBTInputStream nbt;
+            FileInputStream fis = null;
+            if(input == null) {
+                File f = new File("schematics/" + type + "_" + asInt + ".schematic");
+                fis = new FileInputStream(f);
+                nbt = new NBTInputStream(fis);
+            } else {
+                nbt = new NBTInputStream(input);
+            }
+
             CompoundTag backuptag = (CompoundTag) nbt.readTag();
             Map<String, Tag> tagCollection = backuptag.getValue();
 
@@ -73,17 +80,13 @@ public class Building {
             short height = (Short) getChildTag(tagCollection, "Height", ShortTag.class).getValue();
             short length = (Short) getChildTag(tagCollection, "Length", ShortTag.class).getValue();
 
-            System.out.println("lengtes: " +width + " " + height + " " + length);
             byte[] blocks = (byte[]) getChildTag(tagCollection, "Blocks", ByteArrayTag.class).getValue();
             byte[] data = (byte[]) getChildTag(tagCollection, "Data", ByteArrayTag.class).getValue();
 //            System.out.println(entities);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     for (int z = 0; z < length; z++) {
-                        MaterialData[][] material = materials[x];
-                        MaterialData[] materialDatas2 = materials[x][z];
-                        MaterialData materialData3 = materials[x][z][y];
-                        materialDatas2[y] = new MaterialData((int) blocks[coord(x,y,z,width,length)],data[coord(x,y,z,width,length)]);
+                        materials[x][z][y] = new MaterialData((int) blocks[coord(x,y,z,width,length)],data[coord(x,y,z,width,length)]);
                     }
                 }
             }
@@ -91,7 +94,12 @@ public class Building {
 //            List entities = (List) getChildTag(tagCollection, "Entities", ListTag.class).getValue();
 //            List tileentities = (List) getChildTag(tagCollection, "TileEntities", ListTag.class).getValue();
             nbt.close();
-            fis.close();
+            if (input != null) {
+                input.close();
+            }
+            if(fis != null) {
+                fis.close();
+            }
 
         } catch (IOException e) {
             e.printStackTrace();

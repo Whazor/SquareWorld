@@ -65,7 +65,7 @@ public class Finder {
                 for (int j = 0; j < chunkSize; j++) {
                     for (int k = 0; k < chunk[i][j].length; k++) {
                         if(chunk[i][j][k] != null) {
-                            result[i][j][k] = chunk[i][j][k];
+                            result[i][j][k+1] = chunk[i][j][k];
                         }
                     }
                 }
