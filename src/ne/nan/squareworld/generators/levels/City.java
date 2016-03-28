@@ -2,6 +2,7 @@ package ne.nan.squareworld.generators.levels;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
+import ne.nan.squareworld.generators.model.Direction;
 import ne.nan.squareworld.model.Placeable;
 import ne.nan.squareworld.model.Settlement;
 import org.bukkit.material.MaterialData;
@@ -428,19 +429,15 @@ public class City extends Settlement {
                     // look for road
                     if (!fail) {
                         boolean noroad = true;
-                        boolean space_top = true;
-                        boolean space_left = true;
-                        boolean space_right = true;
-                        boolean space_bottom = true;
 
+                        Direction dic = null;
                         // check top
                         if(j > 0) {
                             for (int k = 0; k < size; k++) {
                                 int block = city[i+k][j-1];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_top = false;
-
+                                    dic = Direction.TOP;
                                     break;
                                 }
                             }
@@ -451,7 +448,7 @@ public class City extends Settlement {
                                 int block = city[i+k][j + size];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_bottom = false;
+                                    dic = Direction.BOTTOM;
                                     break;
                                 }
                             }
@@ -462,7 +459,7 @@ public class City extends Settlement {
                                 int block = city[i - 1][j+k];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_left = false;
+                                    dic = Direction.LEFT;
                                     break;
                                 }
                             }
@@ -473,13 +470,14 @@ public class City extends Settlement {
                                 int block = city[i + size][j+k];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_right = false;
+                                    dic = Direction.RIGHT;
                                     break;
                                 }
                             }
                         }
                         if(!noroad) {
-                            placeBuilding(city, new Building(size,rnd.nextInt(Building.getTypes())+1), i, j);
+
+                            placeBuilding(city, new Building(size,dic, rnd.nextInt(Building.getTypes())+1), i, j);
 
 //                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
 //                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
