@@ -64,6 +64,6 @@ public class Building extends Placeable {
     }
 
     static int getTypes() {
-        return 2;
+        return 1;
     }
 }

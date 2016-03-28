@@ -4,10 +4,10 @@ package ne.nan.squareworld.generators.model;
  * Created by nanne on 28/03/16.
  */
 public enum Direction {
-    LEFT(0),
-    TOP(1),
-    RIGHT(2),
-    BOTTOM(3);
+    RIGHT(3),
+    BOTTOM(2),
+    LEFT(1),
+    TOP(0);
 
     private int i;
 
