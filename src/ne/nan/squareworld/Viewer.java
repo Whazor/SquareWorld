@@ -158,6 +158,9 @@ public class Viewer {
                                     case DIRT: // brown id = 3
                                         gl2.glColor3ub((byte) (125), (byte) (75), (byte) (0));
                                         break;
+                                    case GRAVEL: // brown id = 3 112,128,144
+                                        gl2.glColor3ub((byte) (112), (byte) (128), (byte) (144));
+                                        break;
                                     case BRICK: // brick
                                         gl2.glColor3ub((byte) (125), (byte) (0), (byte) (0));
                                         break;
