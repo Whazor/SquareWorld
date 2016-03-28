@@ -498,7 +498,7 @@ public class City extends Settlement {
 
         int prunetreedistance = 4;
         int placetrees = 2950;
-        int lengtdistancetree = 15; //checks the surroundings of a tree if it should place a tree or not
+        int lengtdistancetree = 10; //checks the surroundings of a tree if it should place a tree or not
 
 
         intersections = new ArrayList<>();
@@ -552,7 +552,7 @@ public class City extends Settlement {
                         treevalid = true;
                     }
                 }
-                for (int i = o_x; i < o_x -lengtdistancetree; i--) {
+                for (int i = o_x; i > o_x -lengtdistancetree; i--) {
                     if(i > 0 && i < city.length && city[i][o_y] != 2) {
                         treevalid = true;
                     }
@@ -562,7 +562,7 @@ public class City extends Settlement {
                         treevalid = true;
                     }
                 }
-                for (int i = o_y; i < o_y -lengtdistancetree; i--) {
+                for (int i = o_y; i > o_y -lengtdistancetree; i--) {
                     if(i > 0 && i < city[o_x].length && city[o_x][i] != 2) {
                         treevalid = true;
                     }
