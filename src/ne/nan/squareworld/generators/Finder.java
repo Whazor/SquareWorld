@@ -3,9 +3,11 @@ package ne.nan.squareworld.generators;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.SpatialIndex;
+import ne.nan.squareworld.generators.levels.City;
 import ne.nan.squareworld.generators.levels.Region;
 import ne.nan.squareworld.model.Settlement;
 import org.bukkit.Material;
+import org.bukkit.material.MaterialData;
 
 import java.util.List;
 import java.util.Optional;
@@ -24,7 +26,7 @@ public class Finder {
 
     int chunkSize = Region.chunkSize;
 
-    public Material[][] getChunk(int x, int y) {
+    public MaterialData[][][] getChunk(int x, int y) {
         SpatialIndex block = fl.getRegion(fl.round(x), fl.round(y));
 
         // adept per region
@@ -38,10 +40,10 @@ public class Finder {
 
         Stream<Settlement> filter = fl.filter(list.stream(), envelope);
 
-        Material[][] result = new Material[chunkSize][chunkSize];
+        MaterialData[][][] result = new MaterialData[chunkSize][chunkSize][100];
         for (int i = 0; i < chunkSize; i++)
             for (int j = 0; j < chunkSize; j++) {
-                result[i][j] = Material.GRASS;
+                result[i][j][0] = new MaterialData(Material.GRASS);
             }
 
         Optional<Settlement> first = filter.findFirst();
@@ -53,18 +55,22 @@ public class Finder {
             for (int i = 0; i < chunkSize; i++) {
                 for (int j = 0; j < chunkSize; j++) {
                     if(x3 + i < settlement.width && y3 + j < settlement.height) {
-                        result[i][j] = Material.getMaterial((int) generate[x3 + i][y3 + j]);
+                        result[i][j][0] = new MaterialData((int) generate[x3 + i][y3 + j]);
+                    }
+                }
+            }
+
+            MaterialData[][][] chunk = settlement.getChunk(x3, y3);
+            for (int i = 0; i < chunkSize; i++) {
+                for (int j = 0; j < chunkSize; j++) {
+                    for (int k = 0; k < chunk[i][j].length; k++) {
+                        if(chunk[i][j][k] != null) {
+                            result[i][j][k] = chunk[i][j][k];
+                        }
                     }
                 }
             }
         }
-////        System.out.println("chunk");
         return result;
-
-//        if(stream.count() > 0) {
-//            return Material.GRASS;
-//        } else {
-//            return Material.BEDROCK;
-//        }
     }
 }

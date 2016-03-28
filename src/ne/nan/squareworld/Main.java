@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.generator.BlockPopulator;
 import org.bukkit.generator.ChunkGenerator;
+import org.bukkit.material.MaterialData;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.ArrayList;
@@ -48,10 +49,12 @@ public class Main extends JavaPlugin {
 //                }
 //            }
 
-            Material[][] chunk = finder.getChunk(x * 16, z * 16);
+            MaterialData[][][] chunk = finder.getChunk(x * 16, z * 16);
             for (int i = 0; i < chunk.length; i++) {
                 for (int j = 0; j < chunk[i].length; j++) {
-                    data.setBlock(i, 0, j, chunk[i][j]);
+                    for (int k = 0; k < chunk[i][j].length; k++) {
+                        data.setBlock(i, k, j, chunk[i][j][k]);
+                    }
                 }
             }
 

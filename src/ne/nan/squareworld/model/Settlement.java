@@ -4,6 +4,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Polygon;
+import org.bukkit.material.MaterialData;
 
 /**
  * Created by nanne on 24/02/16.
@@ -30,6 +31,8 @@ public abstract class Settlement {
     }
 
     public abstract short[][] generate();
+
+    public abstract MaterialData[][][] getChunk(int x, int y);
 
     public Envelope getEnvelope() {
         return envelope;

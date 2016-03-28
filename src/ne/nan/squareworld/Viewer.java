@@ -13,6 +13,7 @@ import com.jogamp.opengl.glu.GLU;
 import ne.nan.squareworld.generators.Finder;
 import ne.nan.squareworld.generators.levels.Region;
 import org.bukkit.Material;
+import org.bukkit.material.MaterialData;
 
 import javax.swing.*;
 
@@ -135,11 +136,17 @@ public class Viewer {
             int scale = 5;
             for (int x = 0; x < width; x+=16) {
                 for (int y = 0; y < height; y+=16) {
-                    Material[][] chunk = finder.getChunk(OneTriangle.x + x, OneTriangle.y + y);
+                    MaterialData[][][] chunk = finder.getChunk(OneTriangle.x + x, OneTriangle.y + y);
 
                     for (int i = 0; i < chunk.length; i++) {
                         for (int j = 0; j < chunk[i].length; j++) {
-                            switch (chunk[i][j]) {
+                            Material item = chunk[i][j][0].getItemType();
+                            for (int k = 0; k < chunk[i][j].length; k++) {
+                                if (chunk[i][j][k] != null) {
+                                    item = chunk[i][j][k].getItemType();
+                                }
+                            }
+                            switch (item) {
                                 case GRASS: //green on top id = 2
                                     gl2.glColor3ub((byte)(24) , (byte)(174) , (byte)(24));
 //                                    gl2.glColor3f( 0.0416f, 0.0057471264f, 0.041666668f);

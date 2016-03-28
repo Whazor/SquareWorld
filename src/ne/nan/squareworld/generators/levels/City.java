@@ -1,10 +1,12 @@
 package ne.nan.squareworld.generators.levels;
 
+import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
 import ne.nan.squareworld.algos.QuadTree;
 import ne.nan.squareworld.algos.UF;
 import ne.nan.squareworld.model.Settlement;
 import org.bukkit.material.Directional;
+import org.bukkit.material.MaterialData;
 
 import java.util.*;
 import java.util.function.IntSupplier;
@@ -19,6 +21,8 @@ public class City extends Settlement {
     private int prunedistance = 35;
     private int roaddistancelatch = 15;
     private int roaddistancewidth = 20;
+    private Quadtree buildings = new Quadtree();
+
 
     public City(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance, int roaddistancelatch, int roaddistancewidth) {
         super(zaad, x, y, width, height);
@@ -405,19 +409,19 @@ public class City extends Settlement {
                                 int block = city[i+k][j-1];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_bottom = true;
+//                                    space_bottom = true;
 
                                     break;
                                 }
                             }
                         }
                         // check bottom
-                        if(j + size + 1 < city[i].length) {
+                        if(j + size < city[i].length) {
                             for (int k = 0; k < size; k++) {
-                                int block = city[i+k][j + size + 1];
+                                int block = city[i+k][j + size];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_top = true;
+//                                    space_top = true;
                                     break;
                                 }
                             }
@@ -428,18 +432,18 @@ public class City extends Settlement {
                                 int block = city[i - 1][j+k];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_right = true;
+//                                    space_right = true;
                                     break;
                                 }
                             }
                         }
                         // check right
-                        if(i + size + 1 < city.length) {
+                        if(i + size < city.length) {
                             for (int k = 0; k < size; k++) {
-                                int block = city[i + size + 1][j+k];
+                                int block = city[i + size][j+k];
                                 if (block == 173) {
                                     noroad = false;
-                                    space_left = true;
+//                                    space_left = true;
                                     break;
                                 }
                             }
@@ -447,10 +451,10 @@ public class City extends Settlement {
                         if(!noroad) {
                             placeBuilding(city, new Building(size), i, j);
 
-//                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
-//                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
-//                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
-//                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
+                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
+                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
+                            if(space_left)     placeRect(city, -1, i,        j-1,      1, size);
+                            if(space_right)    placeRect(city, -1, i,        j+size, 1, size);
                         }
                     }
                 }
@@ -472,6 +476,37 @@ public class City extends Settlement {
     int minSizeBuilding = 4;
     int maxSizeBuilding = 8;
 
+    public MaterialData[][][] getChunk(int x, int y) {
+        Envelope search = new Envelope(x, y, 16, 16);
+        List list = buildings.query(search);
+
+        MaterialData[][][] data = new MaterialData[16][16][100];
+
+
+        for (Object obj : list) {
+            Building building = (Building) obj;
+            Envelope envelope = building.getEnvelope();
+            if (envelope.intersects(search)) {
+                MaterialData[][][] build = new MaterialData[16][16][10]; // = building.generate();
+                Envelope intersection = envelope.intersection(search);
+                int minX = (int) intersection.getMinX();
+                int minY = (int) intersection.getMinY();
+                int maxY = (int) intersection.getMaxY();
+                int maxX = (int) intersection.getMaxX();
+
+
+                int buildX = (int) (minX - search.getMinX());
+                int buildY = (int) (minY - search.getMinY());
+
+                for (int i = buildX; i < buildX + maxX; i++) {
+                    System.arraycopy(build[i], buildY, data[minX + i], minY + buildY, buildY + maxY - buildY);
+                }
+            }
+        }
+
+        return data;
+    }
+
 
     private void replace(short[][]city, int from, int to) {
         for (int i = 0; i < city.length; i++) {
@@ -492,6 +527,10 @@ public class City extends Settlement {
         }
     }
     private void placeBuilding(short[][] city, Building build, int x, int y) {
+        Envelope envelope = new Envelope(x, y, build.x(), build.y());
+        build.setEnvelope(envelope);
+        buildings.insert(envelope, build);
+
         for (int i = 0; i < build.x(); i++) {
             for (int j = 0; j < build.y(); j++) {
                 city[x + i][y + j] = 3;
