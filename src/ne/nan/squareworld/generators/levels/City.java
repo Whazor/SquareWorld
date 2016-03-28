@@ -15,7 +15,7 @@ import java.util.*;
 public class City extends Settlement {
     private static Map<Integer, short[][]> cache = new HashMap<>();
     private final int randompoints;
-    private int prunedistance = 35;
+    private int prunedistance = 20;
     private int roaddistancelatch = 15;
     private int roaddistancewidth = 20;
     private Quadtree buildings = new Quadtree();
@@ -150,8 +150,8 @@ public class City extends Settlement {
         Random rand = new Random(zaad);
         List<int[]> intersections = new ArrayList<>();
         for (int i = 0; i <= randomPoints; i++) {
-            int x = rand.nextInt(sizeX - 4) + 2;
-            int y = rand.nextInt(sizeY - 4) + 2;
+            int x = rand.nextInt(sizeX - 32) + 16;
+            int y = rand.nextInt(sizeY - 32) + 16;
             intersections.add(new int[]{x, y, i});
         }
 
@@ -368,15 +368,8 @@ public class City extends Settlement {
                 }
             }
         }
-        for (int i1 = 0; i1 < city.length; i1++) {
-            short[] element = city[i1];
-            for (int i = 0; i < element.length; i++) {
-                short value = element[i];
-                if (0 == i1 || i == 0 || i1 == sizeX - 1 || i == sizeY - 1) {
-                    element[i] = 41;
-                }
-            }
-        }
+//        adds a border around the city
+//
 //        public void drawrect(int[] a,int[] b) {
 //
 //    }
@@ -492,6 +485,49 @@ public class City extends Settlement {
             }
 //        }
         replace(city, -1, 2);
+
+        intersections = new ArrayList<>();
+        for (int i = 0; i <= randomPoints; i++) {
+            int x = rand.nextInt(sizeX - 32) + 16;
+            int y = rand.nextInt(sizeY - 32) + 16;
+            intersections.add(new int[]{x, y, i});
+        }
+
+//http://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
+//        remove all the nodes that are too close to eachother
+
+        int prunetreedistance = 6;
+
+        for (Iterator<int[]> iterator = intersections.iterator(); iterator.hasNext(); ) {
+            int[] coord = iterator.next();
+//            loop through all the coordtoo coordinations and check the distance, if the distance is too large remove the coordinate and break out of the loop
+            for (int[] coordtoo : intersections) {
+                if (distance(coord, coordtoo) < prunetreedistance && distance(coord, coordtoo) != 0) {
+                    iterator.remove();
+                    break;
+                }
+            }
+        }
+
+        for (int[] coordtoo : intersections) {
+            coordtoo[2] = distance(centercoordinate, coordtoo);
+//            check if the tree is to close to a road
+            boolean treevalid = true;
+            hhjhjh:
+            for (int y_s = coordtoo[1]; y_s <= coordtoo[1] + 5; y_s++) {
+                for (int x_s = coordtoo[0]; x_s <= coordtoo[0] + 5; x_s++) {
+                    if(city[x_s][y_s] != 2) {
+                        treevalid = false;
+                        break hhjhjh;
+                    }
+                }
+            }
+
+            if(treevalid) {
+//                placeTree(city, new Building(5, rnd.nextInt(Building.getTypes())), coordtoo[0], coordtoo[1]);
+            }
+        }
+
         return city;
     }
 
