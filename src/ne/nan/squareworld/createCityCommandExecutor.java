@@ -74,13 +74,23 @@ public class createCityCommandExecutor implements CommandExecutor{
 //clean up the city first
                 for (int x = 0; x < destad.length; x++) {
                     for (int y = 0; y < destad[x].length; y++) {
-                        for (int z = 1; z < 10; z++) {
+                        for (int z = 1; z < 15; z++) {
                             Location temploc = new Location(lw,lx + x,z ,lz + y);
                             Block b = temploc.getBlock();
                             if(b.getType() != Material.AIR) {
                                 b.setType(Material.AIR);
                             }
                         }
+                    }
+                }
+//                add bedrock layer
+                for (int x = 0; x < destad.length; x++) {
+                    for (int y = 0; y < destad[x].length; y++) {
+                        Location temploc = new Location(lw,lx + x,0 ,lz + y);
+                        Block b = temploc.getBlock();
+//                        if(b.getType() != Material.BEDROCK) {
+                        b.setType(Material.BEDROCK);
+//                        }
                     }
                 }
                 System.out.println("starting city roadmap");
@@ -90,7 +100,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                     for (int z = 0; z < xrow.length; z++) {
                         short value = xrow[z];
                         ly = 0;
-                        Location temploc = new Location(lw,lx + x,ly ,lz + z);
+                        Location temploc = new Location(lw,lx + x,ly+1 ,lz + z);
 //                        System.out.println("temploc = " + temploc);
 //                        System.out.println("value = " + value);
 //                        temploc.setX(loc.getX());
@@ -117,7 +127,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                         for (int x = 0; x < materials.length; x++) {
                             for (int y = 0; y < materials[x].length; y++) {
                                 for (int z = 0; z < materials[x][y].length; z++) {
-                                    Location temploc = new Location(lworld,x + s_x + lx,z,y + s_y + lz);
+                                    Location temploc = new Location(lworld,x + s_x + lx,z+1,y + s_y + lz);
                                     Block b = temploc.getBlock();
                                     if(materials[x][y][z] != null && materials[x][y][z].getItemType() != null) {
                                         b.setType(materials[x][y][z].getItemType());

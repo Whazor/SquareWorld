@@ -331,6 +331,7 @@ public class City extends Settlement {
         /**
          * Add surounding black blocks around the white ones as a road.
          */
+        int roadwidth =1; // this value *2 + decides the width of the road
         for (int x = 0; x < city.length; x++) {
             for (int y = 0; y < city[x].length; y++) {
                 short value = city[x][y];
@@ -338,8 +339,8 @@ public class City extends Settlement {
 //                    value is white thus a road, now we will make the surroundings black
 
 
-                    for (int sx = x - 2; sx <= x + 2; sx++) {
-                        for (int sy = y - 2; sy <= y + 2; sy++) {
+                    for (int sx = x - roadwidth; sx <= x + roadwidth; sx++) {
+                        for (int sy = y - roadwidth; sy <= y + roadwidth; sy++) {
 //                            prevent out of bounds exception on underlying array
                             if (sy >= 0 && sx >= 0 && sx <= sizeX - 1 && sy <= sizeY - 1) {
 //                                make pixel black if the underlying pixel is empty
@@ -368,6 +369,11 @@ public class City extends Settlement {
                 }
             }
         }
+
+        //change road to more natural look
+
+
+
 //        adds a border around the city
 //
 //        public void drawrect(int[] a,int[] b) {
@@ -485,14 +491,16 @@ public class City extends Settlement {
             }
 //        }
         replace(city, -1, 2);
-
+        replace(city,35,13);
+        replace(city,173,13);
+        replacechange(city,13,2);
 
 
         //////////////////////// place trees
 
-        int prunetreedistance = 5;
-        int placetrees = 950;
-        int lengtdistancetree = 18; //checks the surroundings of a tree if it should place a tree or not
+        int prunetreedistance = 4;
+        int placetrees = 2950;
+        int lengtdistancetree = 15; //checks the surroundings of a tree if it should place a tree or not
 
 
         intersections = new ArrayList<>();
@@ -632,7 +640,19 @@ public class City extends Settlement {
         return data;
     }
 
-
+    private void replacechange(short[][]city, int from, int to) {
+        Random rand = new Random(zaad);
+        for (int i = 0; i < city.length; i++) {
+            for (int j = 0; j < city[i].length; j++) {
+                if(city[i][j] == from) {
+                    int num = rand.nextInt(100);
+                    if(num > 70) {
+                        city[i][j] = (short) to;
+                    }
+                }
+            }
+        }
+    }
     private void replace(short[][]city, int from, int to) {
         for (int i = 0; i < city.length; i++) {
             for (int j = 0; j < city[i].length; j++) {
