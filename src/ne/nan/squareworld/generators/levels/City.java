@@ -473,7 +473,7 @@ public class City extends Settlement {
                             }
                         }
                         if(!noroad) {
-                            placeBuilding(city, new Building(size,rnd.nextInt(Building.getTypes())), i, j);
+                            placeBuilding(city, new Building(size,rnd.nextInt(Building.getTypes())+1), i, j);
 
 //                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
 //                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
@@ -486,8 +486,17 @@ public class City extends Settlement {
 //        }
         replace(city, -1, 2);
 
+
+
+        //////////////////////// place trees
+
+        int prunetreedistance = 5;
+        int placetrees = 950;
+        int lengtdistancetree = 18; //checks the surroundings of a tree if it should place a tree or not
+
+
         intersections = new ArrayList<>();
-        for (int i = 0; i <= randomPoints; i++) {
+        for (int i = 0; i <= placetrees; i++) {
             int x = rand.nextInt(sizeX - 32) + 16;
             int y = rand.nextInt(sizeY - 32) + 16;
             intersections.add(new int[]{x, y, i});
@@ -496,7 +505,6 @@ public class City extends Settlement {
 //http://stackoverflow.com/questions/223918/iterating-through-a-list-avoiding-concurrentmodificationexception-when-removing
 //        remove all the nodes that are too close to eachother
 
-        int prunetreedistance = 6;
 
         for (Iterator<int[]> iterator = intersections.iterator(); iterator.hasNext(); ) {
             int[] coord = iterator.next();
@@ -523,8 +531,39 @@ public class City extends Settlement {
                 }
             }
 
+
+
+
             if(treevalid) {
-                placeBuilding(city, new Tree(coordtoo[0], coordtoo[1], 5, 5), coordtoo[0], coordtoo[1]);
+                treevalid = false;
+
+                //remove trees on the sides
+                int o_x = coordtoo[0];
+                int o_y = coordtoo[1];
+
+                for (int i = o_x; i < o_x +lengtdistancetree; i++) {
+                    if(i > 0 && i < city.length && city[i][o_y] != 2) {
+                        treevalid = true;
+                    }
+                }
+                for (int i = o_x; i < o_x -lengtdistancetree; i--) {
+                    if(i > 0 && i < city.length && city[i][o_y] != 2) {
+                        treevalid = true;
+                    }
+                }
+                for (int i = o_y; i < o_y +lengtdistancetree; i++) {
+                    if(i > 0 && i < city[o_x].length && city[o_x][i] != 2) {
+                        treevalid = true;
+                    }
+                }
+                for (int i = o_y; i < o_y -lengtdistancetree; i--) {
+                    if(i > 0 && i < city[o_x].length && city[o_x][i] != 2) {
+                        treevalid = true;
+                    }
+                }
+                if(treevalid) {
+                    placeBuilding(city, new Tree(coordtoo[0], coordtoo[1], 5, 5), coordtoo[0], coordtoo[1]);
+                }
             }
         }
 

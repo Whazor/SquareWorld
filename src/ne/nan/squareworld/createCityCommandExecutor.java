@@ -117,7 +117,7 @@ public class createCityCommandExecutor implements CommandExecutor{
                         for (int x = 0; x < materials.length; x++) {
                             for (int y = 0; y < materials[x].length; y++) {
                                 for (int z = 0; z < materials[x][y].length; z++) {
-                                    Location temploc = new Location(lworld,x + s_x + lx,z +1,y + s_y + lz);
+                                    Location temploc = new Location(lworld,x + s_x + lx,z,y + s_y + lz);
                                     Block b = temploc.getBlock();
                                     if(materials[x][y][z] != null && materials[x][y][z].getItemType() != null) {
                                         b.setType(materials[x][y][z].getItemType());
