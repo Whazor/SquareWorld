@@ -524,7 +524,7 @@ public class City extends Settlement {
             }
 
             if(treevalid) {
-//                placeTree(city, new Building(5, rnd.nextInt(Building.getTypes())), coordtoo[0], coordtoo[1]);
+                placeBuilding(city, new Tree(coordtoo[0], coordtoo[1], 5, 5), coordtoo[0], coordtoo[1]);
             }
         }
 

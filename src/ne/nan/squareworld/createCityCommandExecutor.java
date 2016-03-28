@@ -2,6 +2,7 @@ package ne.nan.squareworld;
 
 import ne.nan.squareworld.generators.levels.Building;
 import ne.nan.squareworld.generators.levels.City;
+import ne.nan.squareworld.model.Placeable;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -11,6 +12,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.material.MaterialData;
+
+import java.util.Objects;
 
 /**
  * Created by s133781 on 20-3-16.
@@ -102,9 +105,9 @@ public class createCityCommandExecutor implements CommandExecutor{
 
                     }
                 }
-                if(houses == "true") {
+                if(Objects.equals(houses, "true")) {
                     System.out.println("starting placing buildings");
-                    for(Building gebouw: stad.getBuildings()) {
+                    for(Placeable gebouw: stad.getBuildings()) {
                         int s_x = gebouw.getX();
                         int s_y = gebouw.getY();
                         int width  = gebouw.width();

@@ -18,9 +18,9 @@ public abstract class Placeable {
     public abstract void setEnvelope(Envelope envelope);
 
     protected MaterialData[][][] getMaterialDatas(String s) {
-        MaterialData[][][] materials = new MaterialData[getX()][getY()][100];
-
+        MaterialData[][][] materials = new MaterialData[0][][];
         try {
+            System.out.println("/schematics/" + s + ".schematic");
             InputStream input = getClass().getResourceAsStream("/schematics/" + s + ".schematic");
 
             NBTInputStream nbt;
@@ -39,6 +39,9 @@ public abstract class Placeable {
             short width = (Short) getChildTag(tagCollection, "Width", ShortTag.class).getValue();
             short height = (Short) getChildTag(tagCollection, "Height", ShortTag.class).getValue();
             short length = (Short) getChildTag(tagCollection, "Length", ShortTag.class).getValue();
+
+            materials = new MaterialData[width][length][height];
+            System.out.println(width+" - "+height+" - " + length);
 
             byte[] blocks = (byte[]) getChildTag(tagCollection, "Blocks", ByteArrayTag.class).getValue();
             byte[] data = (byte[]) getChildTag(tagCollection, "Data", ByteArrayTag.class).getValue();
