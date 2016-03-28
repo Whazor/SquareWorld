@@ -2,6 +2,7 @@ package ne.nan.squareworld.generators.levels;
 
 import com.vividsolutions.jts.geom.Envelope;
 import com.vividsolutions.jts.index.quadtree.Quadtree;
+import ne.nan.squareworld.model.Placeable;
 import ne.nan.squareworld.model.Settlement;
 import org.bukkit.material.MaterialData;
 
@@ -20,11 +21,11 @@ public class City extends Settlement {
     private Quadtree buildings = new Quadtree();
 
 
-    public List<Building> getBuildings() {
+    public List<Placeable> getBuildings() {
         List list = buildings.queryAll();
-        ArrayList<Building> arr = new ArrayList<>();
+        ArrayList<Placeable> arr = new ArrayList<>();
         for (Object objBuild: list) {
-            arr.add((Building) objBuild);
+            arr.add((Placeable) objBuild);
         }
         return arr;
     }
@@ -391,6 +392,8 @@ public class City extends Settlement {
         for (int k = 7; k <= 12; k++) {
             integers.add(k);
         }
+//        integers.add(12);
+//        integers.add(11);
 
         int width = city.length - 12;
         int height = city[0].length - 12;
@@ -401,7 +404,7 @@ public class City extends Settlement {
         }
 
         Collections.shuffle(list, rnd);
-
+//
         for(int m : list) {
             int i = m % width;
             int j = (int) Math.floor(m / width);
@@ -411,7 +414,7 @@ public class City extends Settlement {
 
                 Collections.shuffle(integers, rnd);
 //                System.out.println(integers);
-                for (int size: integers) {
+                for (int size: integers.subList(0, 3)) {
 //                    for (int size = 12; size >= 7; size--) {
                     boolean fail = false;
                     next:
@@ -492,6 +495,10 @@ public class City extends Settlement {
         return city;
     }
 
+    private Integer distanceBlaat(int[] i1, int[] i2) {
+        return Math.min(i1[0] - i2[0], i1[1] - i2[1]);
+    }
+
     private void put(short[][] city, short[][] shorts, int x, int y) {
         for (int i = 0; i < shorts.length; i++) {
             for (int j = 0; j < shorts[i].length; j++) {
@@ -513,7 +520,7 @@ public class City extends Settlement {
         MaterialData[][][] data = new MaterialData[16][16][height];
 
         for (Object obj : list) {
-            Building building = (Building) obj;
+            Placeable building = (Placeable) obj;
             Envelope envelope = building.getEnvelope();
             if (envelope.intersects(search)) {
 //                System.out.println(building.getX() + " " + building.getY() + " - " + building.width());
@@ -569,7 +576,7 @@ public class City extends Settlement {
             }
         }
     }
-    private void placeBuilding(short[][] city, Building build, int x, int y) {
+    private void placeBuilding(short[][] city, Placeable build, int x, int y) {
         Envelope envelope = new Envelope(x, x+build.width(), y, y + build.height());
         build.setEnvelope(envelope);
         buildings.insert(envelope, build);
