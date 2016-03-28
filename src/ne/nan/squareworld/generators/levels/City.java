@@ -48,7 +48,7 @@ public class City extends Settlement {
     }
 
     public Hash hash() {
-        return new Hash(zaad, x, y, width, height, randompoints, prunedistance);
+        return new Hash(zaad, x, y, width, height, randompoints, prunedistance, roaddistancelatch, roaddistancewidth);
     }
 //    constructor met settlement
 //    width,height
@@ -247,7 +247,6 @@ public class City extends Settlement {
                     count++;
                 }
                 if (!horizontal) {
-                    System.out.println("roaddistancelatch" + roaddistancelatch);
                     int temp = neighboorroadhorizontal(c_x, c_y, roaddistancelatch, city, sizeX, sizeY);
 
                     if (temp != 0) {
@@ -565,8 +564,11 @@ public class City extends Settlement {
         private final int height;
         private final int randompoints;
         private final int prunedistance;
+        private final int roaddistancelatch;
+        private final int roaddistancewidth;
 
-        public Hash(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance) {
+
+        public Hash(int zaad, int x, int y, int width, int height, int randompoints, int prunedistance, int roaddistancelatch, int roaddistancewidth) {
             this.zaad = zaad;
             this.x = x;
             this.y = y;
@@ -574,11 +576,13 @@ public class City extends Settlement {
             this.height = height;
             this.randompoints = randompoints;
             this.prunedistance = prunedistance;
+            this.roaddistancelatch = roaddistancelatch;
+            this.roaddistancewidth = roaddistancewidth;
         }
 
         @Override
         public int hashCode() {
-            return Objects.hash(zaad, x, y, width, height, randompoints, prunedistance);
+            return Objects.hash(zaad, x, y, width, height, randompoints, prunedistance, roaddistancelatch, roaddistancewidth);
         }
     }
 }
