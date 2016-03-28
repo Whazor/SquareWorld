@@ -49,7 +49,15 @@ public abstract class Placeable {
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     for (int z = 0; z < length; z++) {
-                        materials[x][z][y] = new MaterialData((int) blocks[coord(x,y,z,width,length)],data[coord(x,y,z,width,length)]);
+                        int blocktype = (int) blocks[coord(x,y,z,width,length)];
+                        int blockdata = (int) data[coord(x,y,z,width,length)];
+                        if(blocktype < 0) {
+                            blocktype = blocktype + 256;
+                        }
+                        if(blockdata < 0) {
+                            blockdata = blockdata + 256;
+                        }
+                        materials[x][z][y] = new MaterialData((int) blocktype,(byte) blockdata);
                     }
                 }
             }
