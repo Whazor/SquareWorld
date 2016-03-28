@@ -244,6 +244,7 @@ public class City extends Settlement {
                     count++;
                 }
                 if (!horizontal) {
+                    System.out.println("roaddistancelatch" + roaddistancelatch);
                     int temp = neighboorroadhorizontal(c_x, c_y, roaddistancelatch, city, sizeX, sizeY);
 
                     if (temp != 0) {
