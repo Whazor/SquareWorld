@@ -61,9 +61,7 @@ public class City extends Settlement {
 //            cache.remove(cache.keySet().iterator().next());
 //        }
 
-        System.out.println("Cache miss " + x + ","+ y);
         short[][] shorts = generateCity(x, y, width, height, randompoints, prunedistance);
-        System.out.println(hash().hashCode());
         cache.put(cid, shorts);
         return shorts;
     }
@@ -244,7 +242,6 @@ public class City extends Settlement {
                     count++;
                 }
                 if (!horizontal) {
-                    System.out.println("roaddistancelatch" + roaddistancelatch);
                     int temp = neighboorroadhorizontal(c_x, c_y, roaddistancelatch, city, sizeX, sizeY);
 
                     if (temp != 0) {
@@ -484,34 +481,40 @@ public class City extends Settlement {
     int maxSizeBuilding = 8;
 
     public MaterialData[][][] getChunk(int x, int y) {
-        Envelope search = new Envelope(x, y, 16, 16);
+        Envelope search = new Envelope(x, x+16, y, y + 16);
         List list = buildings.query(search);
 
 
         int height = 100;
         MaterialData[][][] data = new MaterialData[16][16][height];
 
-
         for (Object obj : list) {
             Building building = (Building) obj;
             Envelope envelope = building.getEnvelope();
             if (envelope.intersects(search)) {
+                System.out.println("actually intersects...");
                 MaterialData[][][] build = building.generate();
                 Envelope intersection = envelope.intersection(search);
+                int searchX = (int) search.getMinX();
+                int searchY = (int) search.getMinY();
+
                 int minX = (int) intersection.getMinX();
                 int minY = (int) intersection.getMinY();
                 int maxY = (int) intersection.getMaxY();
                 int maxX = (int) intersection.getMaxX();
 
 
-                int buildX = (int) (minX - search.getMinX());
-                int buildY = (int) (minY - search.getMinY());
+                for (int i = minX; i < maxX; i++) {
+                    for (int j = minY; j < maxY; j++) {
+                        int buildX = i - searchX;
+                        int buildY = j - searchY;
 
-                for (int i = buildX; i < buildX + maxX; i++) {
-                    for (int j = buildY; j < buildY + maxY; j++) {
-                        for (int k = 0; k < Math.min(height, build[i][j].length); k++) {
-                            MaterialData data1 = build[i][j][k];
-                            data[i - minX][j - minY][k] = data1;
+                        if(buildX < build.length && buildY < build[buildX].length) {
+                            for (int k = 0; k < Math.min(height, build[buildX][buildY].length); k++) {
+                                MaterialData data1 = build[buildX][buildY][k];
+
+                                data[i - x][j - y][k] = data1;
+                            }
                         }
                     }
 //                    System.arraycopy(build[i], buildY, data[minX + i], minY + buildY, buildY + maxY - buildY);
@@ -542,7 +545,7 @@ public class City extends Settlement {
         }
     }
     private void placeBuilding(short[][] city, Building build, int x, int y) {
-        Envelope envelope = new Envelope(x, y, build.width(), build.height());
+        Envelope envelope = new Envelope(x, x+build.width(), y, y + build.height());
         build.setEnvelope(envelope);
         buildings.insert(envelope, build);
 
@@ -553,7 +556,6 @@ public class City extends Settlement {
         }
     }
 
-    private enum Direction { TOP, LEFT, RIGHT, BOTTOM }
     private class Hash {
         private final int zaad;
         private final int x;

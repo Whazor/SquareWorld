@@ -5,8 +5,10 @@ import javafx.scene.paint.Material;
 import org.bukkit.material.MaterialData;
 import org.jnbt.*;
 
+import javax.annotation.processing.FilerException;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -59,6 +61,7 @@ public class Building {
 
         try {
             System.out.println("Loading building");
+            System.out.println("schematics/" + type + "_" + asInt + ".schematic");
             File f = new File("schematics/" + type + "_" + asInt + ".schematic");
 
             FileInputStream fis = new FileInputStream(f);
@@ -70,13 +73,17 @@ public class Building {
             short height = (Short) getChildTag(tagCollection, "Height", ShortTag.class).getValue();
             short length = (Short) getChildTag(tagCollection, "Length", ShortTag.class).getValue();
 
+            System.out.println("lengtes: " +width + " " + height + " " + length);
             byte[] blocks = (byte[]) getChildTag(tagCollection, "Blocks", ByteArrayTag.class).getValue();
             byte[] data = (byte[]) getChildTag(tagCollection, "Data", ByteArrayTag.class).getValue();
 //            System.out.println(entities);
             for (int x = 0; x < width; x++) {
                 for (int y = 0; y < height; y++) {
                     for (int z = 0; z < length; z++) {
-                        materials[x][z][y] = new MaterialData((int) blocks[coord(x,y,z,asInt,asInt)],data[coord(x,y,z,asInt,asInt)]);
+                        MaterialData[][] material = materials[x];
+                        MaterialData[] materialDatas2 = materials[x][z];
+                        MaterialData materialData3 = materials[x][z][y];
+                        materialDatas2[y] = new MaterialData((int) blocks[coord(x,y,z,width,length)],data[coord(x,y,z,width,length)]);
                     }
                 }
             }
@@ -86,7 +93,7 @@ public class Building {
             nbt.close();
             fis.close();
 
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
