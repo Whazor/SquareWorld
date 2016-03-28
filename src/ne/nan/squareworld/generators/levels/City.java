@@ -387,15 +387,31 @@ public class City extends Settlement {
 
 
         Random rnd = new Random(zaad);
+        LinkedList<Integer> integers = new LinkedList<>();
+        for (int k = 7; k <= 12; k++) {
+            integers.add(k);
+        }
 
-            for (int i = 0; i < city.length - 12; i++) {
-                for (int j = 0; j < city[i].length - 12; j++) {
-                    LinkedList<Integer> integers = new LinkedList<>();
-                    for (int k = 7; k <= 12; k++) {
-                        integers.add(k);
-                    }
-                    Collections.shuffle(integers, rnd);
-                    for (int size: integers) {
+        int width = city.length - 12;
+        int height = city[0].length - 12;
+
+        LinkedList<Integer> list = new LinkedList<>();
+        for (int i = 0; i < width * height; i++) {
+            list.add(i);
+        }
+
+        Collections.shuffle(list, rnd);
+
+        for(int m : list) {
+            int i = m % width;
+            int j = (int) Math.floor(m / width);
+//        for (int i = 0; i < city.length - 12; i++) {
+//            for (int j : heightlist) {
+//            for (int j = 0; j < city[i].length - 12; j++) {
+
+                Collections.shuffle(integers, rnd);
+//                System.out.println(integers);
+                for (int size: integers) {
 //                    for (int size = 12; size >= 7; size--) {
                     boolean fail = false;
                     next:
@@ -461,7 +477,7 @@ public class City extends Settlement {
                             }
                         }
                         if(!noroad) {
-                            placeBuilding(city, new Building(size,0), i, j);
+                            placeBuilding(city, new Building(size,rnd.nextInt(Building.getTypes())), i, j);
 
 //                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
 //                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
@@ -471,7 +487,7 @@ public class City extends Settlement {
                     }
                 }
             }
-        }
+//        }
         replace(city, -1, 2);
         return city;
     }

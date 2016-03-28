@@ -23,6 +23,8 @@ public class Building {
     private int x;
     private int y;
 
+    private static int types = 1;
+
     public Building(int asInt, int type) {
 
         this.asInt = asInt;
@@ -119,5 +121,9 @@ public class Building {
 
     public int getY() {
         return y;
+    }
+
+    public static int getTypes() {
+        return types;
     }
 }
