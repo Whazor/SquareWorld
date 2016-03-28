@@ -55,6 +55,7 @@ public class Finder {
             for (int i = 0; i < chunkSize; i++) {
                 for (int j = 0; j < chunkSize; j++) {
                     if(x3 + i < settlement.width && y3 + j < settlement.height) {
+//                        System.out.println("j + i = " + j +"-"+ i);
                         result[i][j][0] = new MaterialData((int) generate[x3 + i][y3 + j]);
                     }
                 }
@@ -65,7 +66,7 @@ public class Finder {
                 for (int j = 0; j < chunkSize; j++) {
                     for (int k = 0; k < chunk[i][j].length; k++) {
                         if(chunk[i][j][k] != null) {
-                            result[i][j][k+1] = chunk[i][j][k];
+                            result[i][j][k] = chunk[i][j][k];
                         }
                     }
                 }
