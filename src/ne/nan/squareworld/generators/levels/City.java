@@ -449,7 +449,7 @@ public class City extends Settlement {
                             }
                         }
                         if(!noroad) {
-                            placeBuilding(city, new Building(size), i, j);
+                            placeBuilding(city, new Building(size,0), i, j);
 
                             if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
                             if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);
@@ -487,7 +487,7 @@ public class City extends Settlement {
             Building building = (Building) obj;
             Envelope envelope = building.getEnvelope();
             if (envelope.intersects(search)) {
-                MaterialData[][][] build = new MaterialData[16][16][10]; // = building.generate();
+                MaterialData[][][] build = building.generate();
                 Envelope intersection = envelope.intersection(search);
                 int minX = (int) intersection.getMinX();
                 int minY = (int) intersection.getMinY();
@@ -499,7 +499,12 @@ public class City extends Settlement {
                 int buildY = (int) (minY - search.getMinY());
 
                 for (int i = buildX; i < buildX + maxX; i++) {
-                    System.arraycopy(build[i], buildY, data[minX + i], minY + buildY, buildY + maxY - buildY);
+                    for (int j = buildY; j < buildY + maxY; j++) {
+                        for (int k = 0; k < build[i][j].length; k++) {
+                            data[minX + i][minY + j][k] = build[i][j][k];
+                        }
+                    }
+//                    System.arraycopy(build[i], buildY, data[minX + i], minY + buildY, buildY + maxY - buildY);
                 }
             }
         }
