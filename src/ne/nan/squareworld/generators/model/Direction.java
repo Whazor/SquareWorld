@@ -5,9 +5,9 @@ package ne.nan.squareworld.generators.model;
  */
 public enum Direction {
     RIGHT(3),
-    BOTTOM(2),
+    BOTTOM(0),
     LEFT(1),
-    TOP(0);
+    TOP(2);
 
     private int i;
 

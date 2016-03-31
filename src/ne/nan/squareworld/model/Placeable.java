@@ -18,6 +18,7 @@ public abstract class Placeable {
     public abstract void setEnvelope(Envelope envelope);
 
     protected MaterialData[][][] getMaterialDatas(String s) {
+//        System.out.println("s = " + s);
         MaterialData[][][] materials = new MaterialData[0][][];
         try {
             InputStream input = getClass().getResourceAsStream("/schematics/" + s + ".schematic");

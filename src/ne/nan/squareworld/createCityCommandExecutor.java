@@ -35,6 +35,16 @@ public class createCityCommandExecutor implements CommandExecutor{
                 }
                 if (args.length < 8) {
                     sender.sendMessage("Not enough arguments! /createcity <width> <height> <seed> <intersections> <prunedistance> <roadlatchdistance> <minblockwidth> <houses>");
+                    sender.sendMessage("Not enough arguments! /createcity <width> <length> <seed> <intersections> <prunedistance> <roadlatchdistance> <minblockwidth> <houses>");
+                    sender.sendMessage("<width> the width of the city, adviced 150-300");
+                    sender.sendMessage("<length> the length of the city, adviced 150-300");
+                    sender.sendMessage("<seed> a number that will be used for generating the city");
+                    sender.sendMessage("<intersections> the number of intersections that will initially be generated");
+                    sender.sendMessage("<prunedistance> The minimum length between each intersection");
+                    sender.sendMessage("<roadlatchdistance> the distance of when a road latches on to a crossing road");
+                    sender.sendMessage("<minblockwidth> the minimum width/lengt of a block, a block is the place where multiple houses are build");
+                    sender.sendMessage("<houses> true/false if you want houses or not");
+//                    sender.sendMessage("Note that the ");
                     return false;
                 }
                 System.out.println("Starting city creation");

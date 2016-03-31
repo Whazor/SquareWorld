@@ -477,7 +477,7 @@ public class City extends Settlement {
                         }
                         if(!noroad) {
 
-                            placeBuilding(city, new Building(size,dic, rnd.nextInt(Building.getTypes())+1), i, j);
+                            placeBuilding(city, new Building(size,dic, 0), i, j);
 
 //                            if(space_top)      placeRect(city, -1, i-1,      j,        size, 1);
 //                            if(space_bottom)   placeRect(city, -1, i+size,   j,        size, 1);

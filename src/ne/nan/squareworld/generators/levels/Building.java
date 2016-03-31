@@ -27,7 +27,7 @@ public class Building extends Placeable {
 
     private int dic;
 
-    Building(int asInt, Direction dic, int type) {
+    Building(int asInt, Direction dic, int typ) {
         this.asInt = asInt;
         this.type = type;
         this.dic = dic.toInt();
@@ -53,7 +53,10 @@ public class Building extends Placeable {
 
 
     public MaterialData[][][] generate() {
-        return getMaterialDatas(type + "_" + asInt + "_" + dic);
+
+//        System.out.println("type = " + type);
+//        return getMaterialDatas(0 + "_" + asInt + "_" + dic);
+        return getMaterialDatas(0 + "_" + asInt + "_" + dic);
     }
     public int getX() {
         return x;
